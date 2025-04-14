@@ -100,7 +100,7 @@ else:
 
 st.divider()
 st.caption(
-    "Ce calculateur est basé sur le système de classement AFT Padel Wallonie de [Janvier 2025](https://padel.tppwb.be/wp-content/uploads/2024/12/Methode-calcul-classements-janvier-2025-4.pdf). Ce calculateur est un outil indépendant, non affilié à l'AFT Padel. Les résultats obtenus n'ont aucune valeur officielle et ne remplacent en aucun cas les décisions de l'organisation. Les données que vous entrez sont traitées localement sur les serveurs de Streamlit Cloud et ne sont ni partagées, ni stockées à des fins commerciales."
+    "Ce calculateur est basé sur le système de classement AFT Padel Wallonie-Bruxelles de [Janvier 2025](https://padel.tppwb.be/wp-content/uploads/2024/12/Methode-calcul-classements-janvier-2025-4.pdf). Ce calculateur est un outil indépendant, non affilié à l'AFT Padel. Les résultats obtenus n'ont aucune valeur officielle et ne remplacent en aucun cas les décisions de l'organisation. Les données que vous entrez sont traitées localement sur les serveurs de Streamlit Cloud et ne sont ni partagées, ni stockées à des fins commerciales."
 )
 
 st.caption(
