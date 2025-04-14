@@ -17,15 +17,16 @@ with st.form("match_form"):
     st.subheader("Ajouter un match")
 
     genre = st.selectbox("Genre", ["Messieurs", "Dames"])
+    category = st.selectbox(
+        "Votre classement actuel",
+        ["P50", "P100", "P200", "P300", "P400", "P500", "P700", "P1000"],
+    )
     result = st.selectbox("Résultat", ["Victoire", "Défaite"])
     comp_type = st.selectbox(
         "Type de compétition", ["Tour", "Interclubs", "Mixte", "Masters"]
     )
     phase = st.selectbox("Phase", ["Poule", "Tableau"])
-    category = st.selectbox(
-        "Catégorie", ["P50", "P100", "P200", "P300", "P400", "P500", "P700", "P1000"]
-    )
-
+    
     col1, col2 = st.columns(2)
     with col1:
         player_rank = st.selectbox(
