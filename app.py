@@ -104,5 +104,5 @@ st.caption(
 )
 
 st.caption(
-    "Made by **Mattéo Hauglustaine** - 2025 - *Click [here](https://github.com/Matt-haug/Thermodynamic_cycle_simulator) to get acces to the source code on my GitHub*"
+    "Made by **Mattéo Hauglustaine** - 2025 - *Click [here](https://github.com/Matt-haug/AFT_padel_ranking_calculator) to get acces to the source code on my GitHub*"
 )
