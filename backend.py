@@ -93,8 +93,14 @@ def generate_recommendation(
         else RANKING_THRESHOLDS_MEN
     )
 
-    if category not in thresholds or match_count < 10:
-        return "❕ Pas de recommandation (catégorie inconnue ou <10 matchs)."
+    # Seulement 6 matchs nécessaires dans certains cas sinon 10
+    special_min_match = (gender == "dames" and category in ["P400", "P500"]) or (
+        gender == "messieurs" and category == "P1000"
+    )
+    required_matches = 6 if special_min_match else 10
+
+    if category not in thresholds or match_count < required_matches:
+        return f"❕ Pas de recommandation (catégorie inconnue ou <{required_matches} matchs)."
 
     limits = thresholds[category]
     if ratio < limits["drop"]:
