@@ -94,8 +94,8 @@ def generate_recommendation(
     )
 
     # Seulement 6 matchs nécessaires dans certains cas sinon 10
-    special_min_match = (gender == "dames" and category in ["P400", "P500"]) or (
-        gender == "messieurs" and category == "P1000"
+    special_min_match = (gender.lower() == "dames" and category in ["P400", "P500"]) or (
+        gender.lower() == "messieurs" and category == "P1000"
     )
     required_matches = 6 if special_min_match else 10
 
