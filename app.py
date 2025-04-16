@@ -85,7 +85,6 @@ if st.session_state["matches"]:
     ax.set_xlabel("Nombre de matchs")
     ax.set_ylabel(
         "Pourcentage de\nvictoires ajusté\n[%]",
-        ha="right",
         va="top",
         loc="top",
         rotation="horizontal",
