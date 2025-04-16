@@ -87,7 +87,7 @@ if st.session_state["matches"]:
         "Pourcentage de\nvictoires ajusté\n[%]",
         ha="right",
         va="top",
-        loc="top,
+        loc="top",
         rotation="horizontal",
         labelpad=20,
     )
