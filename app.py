@@ -82,7 +82,7 @@ if st.session_state["matches"]:
     fig, ax = plt.subplots()
     ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
     ax.set_xticks(range(1, len(ratios) + 1))
-    ax.set_xlabel("Nombre de matchs")
+    ax.set_xlabel("Nombre de matchs",loc="right")
     ax.set_ylabel(
         "Pourcentage de\nvictoires ajusté\n[%]",
         va="top",
