@@ -28,7 +28,7 @@ RANKING_THRESHOLDS_WOMEN = {
 }
 
 
-def get_ranking_correction(player, partner, opp1, opp2):
+def get_ranking_correction(player, partner, opp1, opp2, result):
     my_sum = player + partner
     opp_sum = opp1 + opp2
 
@@ -48,7 +48,12 @@ def get_ranking_correction(player, partner, opp1, opp2):
         3: {-3: 1.40, -2: 1.20, -1: 1.10, 0: 1.00, 1: 0.55, 2: 0.40, 3: 0.15},
     }
 
-    return correction_matrix[delta_sum][delta_individual]
+    if result == "victoire":
+        factor = correction_matrix[delta_sum][delta_individual]
+    else:
+        factor = correction_matrix[-delta_sum][-delta_individual]
+    
+    return factor
 
 
 def compute_win_ratio(df: pd.DataFrame) -> tuple:
@@ -66,12 +71,12 @@ def compute_win_ratio(df: pd.DataFrame) -> tuple:
 
         phase_factor = PHASE_FACTORS[phase][result]
         comp_factor = COMPETITION_FACTORS[comp_type]
-        rank_factor = get_ranking_correction(player, partner, opp1, opp2)
+        rank_factor = get_ranking_correction(player, partner, opp1, opp2, result)
 
-        base_score = 1 if result.lower() == "victoire" else 0
         weight = phase_factor * comp_factor * rank_factor
+        score = weight if result == "victoire" else 0
 
-        total_points += base_score * weight
+        total_points += score
         total_weights += weight
 
     if total_weights == 0:
