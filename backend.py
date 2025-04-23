@@ -74,7 +74,7 @@ def compute_win_ratio(df: pd.DataFrame) -> tuple:
         rank_factor = get_ranking_correction(player, partner, opp1, opp2, result)
 
         weight = phase_factor * comp_factor * rank_factor
-        score = weight if result == "victoire" else 0
+        score = weight if result.lower() == "victoire" else 0
 
         total_points += score
         total_weights += weight
