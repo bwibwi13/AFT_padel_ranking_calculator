@@ -13,6 +13,9 @@ st.title("📊 Calculateur de classement AFT Padel Wallonie-Bruxelles")
 if "matches" not in st.session_state:
     st.session_state["matches"] = []
 
+if "flag_uploaded_file" not in st.session_state:
+    st.session_state["flag_uploaded_file"] = False
+
 with st.form("match_form"):
     st.subheader("Ajouter un match")
 
@@ -57,6 +60,22 @@ with st.form("match_form"):
         }
         st.session_state["matches"] = st.session_state["matches"] + [match]
         st.success("✅ Match ajouté avec succès !")
+
+uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
+
+if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
+    try:
+        loaded_data = json.load(uploaded_file)
+        if isinstance(loaded_data, list) and all(
+            isinstance(match, dict) for match in loaded_data
+        ):
+            st.session_state["matches"] = st.session_state["matches"] + loaded_data
+            st.success("✅ Matchs chargés avec succès !")
+            st.session_state["flag_uploaded_file"] = True
+        else:
+            st.error("❌ Fichier invalide.")
+    except Exception as e:
+        st.error(f"❌ Erreur lors du chargement du fichier: {e}")
 
 # ---------- DISPLAY RESULTS ----------
 
