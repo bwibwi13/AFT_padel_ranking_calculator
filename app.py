@@ -122,6 +122,7 @@ if st.session_state["matches"]:
 
     if st.button("🔁 Réinitialiser le calcul"):
         st.session_state["matches"] = []
+        st.session_state["flag_uploaded_file"] = False
         st.rerun()
 else:
     st.info("Ajoutez des matchs pour commencer le calcul.")
