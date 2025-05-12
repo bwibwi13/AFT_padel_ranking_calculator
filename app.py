@@ -26,19 +26,17 @@ with st.form("match_form"):
         "Type de compétition", ["Tour", "Interclubs", "Mixte", "Masters"]
     )
     phase = st.selectbox("Phase", ["Poule", "Tableau"])
+
+    partner_rank = st.selectbox(
+            "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
+        )
     
     col1, col2 = st.columns(2)
     with col1:
-        player_rank = st.selectbox(
-            "Votre classement", [50] + list(range(100, 600, 100)) + [700, 1000]
-        )
         opp1_rank = st.selectbox(
             "Classement adversaire 1", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
-    with col2:
-        partner_rank = st.selectbox(
-            "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
-        )
+    with col2:        
         opp2_rank = st.selectbox(
             "Classement adversaire 2", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
@@ -51,7 +49,7 @@ with st.form("match_form"):
             "resultat": result,
             "type_competition": comp_type,
             "phase": phase,
-            "classement_joueur": player_rank,
+            "classement_joueur": float(''.join(filter(str.isdigit, category))),
             "classement_partenaire": partner_rank,
             "classement_adversaire_1": opp1_rank,
             "classement_adversaire_2": opp2_rank,
