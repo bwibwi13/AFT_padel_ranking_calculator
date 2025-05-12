@@ -65,6 +65,14 @@ if st.session_state["matches"]:
     st.subheader("📋 Vos matchs enregistrés")
     st.dataframe(df)
 
+    if st.button("🗑️ Supprimer le dernier match encodé"):
+        if st.session_state["matches"]:
+            removed_match = st.session_state["matches"].pop()
+            st.success("Dernier match supprimé ✅")
+            st.rerun()
+        else:
+            st.warning("Aucun match à supprimer.")
+
     win_ratio, recommendation = compute_win_ratio(df)
     st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
     st.markdown(f"### 📌 Recommandation : {recommendation}")
