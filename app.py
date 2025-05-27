@@ -83,6 +83,8 @@ if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None
 
 if st.session_state["matches"]:
     df = pd.DataFrame(st.session_state["matches"])
+    win_ratio, recommendation, match_weights = compute_win_ratio(df)
+    df["coefficient_total"] = match_weights
     st.subheader("📋 Vos matchs enregistrés")
     st.dataframe(df)
 
@@ -105,7 +107,6 @@ if st.session_state["matches"]:
                 "💾 Télécharger mes matchs", json_data, file_name="mes_matchs_AFT.json"
             )
 
-    win_ratio, recommendation = compute_win_ratio(df)
     st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
     st.markdown(f"### 📌 Recommandation : {recommendation}")
 
@@ -114,7 +115,7 @@ if st.session_state["matches"]:
     ratios = []
     for i in range(1, len(df) + 1):
         sub_df = df.iloc[:i]
-        ratio, _ = compute_win_ratio(sub_df)
+        ratio, _, _ = compute_win_ratio(sub_df)
         ratios.append(ratio)
 
     fig, ax = plt.subplots()
