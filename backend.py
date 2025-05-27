@@ -2,8 +2,8 @@
 import pandas as pd
 
 PHASE_FACTORS = {
-    "Poule": {"Victoire": 1.0, "Défaite": 1.0},
-    "Tableau": {"Victoire": 1.25, "Défaite": 0.75},
+    "Poule": {"victoire": 1.0, "défaite": 1.0},
+    "Tableau": {"victoire": 1.25, "défaite": 0.75},
 }
 
 COMPETITION_FACTORS = {"Tour": 1.0, "Interclubs": 0.9, "Mixte": 0.8, "Masters": 1.1}
@@ -59,9 +59,10 @@ def get_ranking_correction(player, partner, opp1, opp2, result):
 def compute_win_ratio(df: pd.DataFrame) -> tuple:
     total_points = 0
     total_weights = 0
+    match_weights = []
 
     for _, row in df.iterrows():
-        result = row["resultat"]
+        result = row["resultat"].lower()
         comp_type = row["type_competition"]
         phase = row["phase"]
         player = row["classement_joueur"]
@@ -75,6 +76,7 @@ def compute_win_ratio(df: pd.DataFrame) -> tuple:
 
         weight = phase_factor * comp_factor * rank_factor
         score = weight if result.lower() == "victoire" else 0
+        match_weights.append(weight)
 
         total_points += score
         total_weights += weight
@@ -86,7 +88,7 @@ def compute_win_ratio(df: pd.DataFrame) -> tuple:
     category = df["categorie"].iloc[0]
     gender = df["genre"].iloc[0]
     recommendation = generate_recommendation(ratio, len(df), category, gender)
-    return ratio, recommendation
+    return ratio, recommendation, match_weights
 
 
 def generate_recommendation(
