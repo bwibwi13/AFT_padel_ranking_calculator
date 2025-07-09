@@ -124,13 +124,13 @@ def generate_recommendation(
 def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
 
-    return tppwb_data
-
     # Sort by ascending order of "Date"
     #tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
 
     matches = []
     for item in tppwb_data:
+        if not isinstance(item, dict):
+            continue  # skip non-dict items
         match = {
             # Guess the gender from the category
             "genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
