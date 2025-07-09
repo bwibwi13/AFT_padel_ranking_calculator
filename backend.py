@@ -138,7 +138,7 @@ def tppwb_matches(affiliation_number):
              "resultat": "Victoire" if item.get("Victoryordefeat")=="V" else "Défaite",
             
             # # Guess the type from the category
-            # "type_competition": "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD") else "Mixte" if item.get("Category").startswith("MX") else "Interclubs",
+             "type_competition": "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD") else "Mixte" if item.get("Category").startswith("MX") else "Interclubs",
 
             # # Guess the phase
             # "phase": "Tableau" if item.get("Drawtype")=="S" or item.get("Typetab")=="Tour Final" else "Poule",
