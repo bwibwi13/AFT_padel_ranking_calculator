@@ -37,8 +37,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         
         try:
             matches = tppwb_matches(affiliation_number)
-            #Debug: check the structure
-            st.write(matches)
+            #st.write(matches)   #Debug: check the structure
 
             if isinstance(matches, list):
                 st.success("✅ Matchs chargés depuis le site TPPWB !")
@@ -49,25 +48,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         except Exception as e:
             st.error(f"❌ Erreur lors de la récupération des données : {e}")
 
-
-uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
-
-if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
-    try:
-        loaded_data = json.load(uploaded_file)
-        if isinstance(loaded_data, list) and all(
-            isinstance(match, dict) for match in loaded_data
-        ):
-            st.session_state["matches"] = st.session_state["matches"] + loaded_data
-            st.success("✅ Matchs chargés avec succès !")
-            st.session_state["flag_uploaded_file"] = True
-        else:
-            st.error("❌ Fichier invalide.")
-    except Exception as e:
-        st.error(f"❌ Erreur lors du chargement du fichier: {e}")
-
 # ---------- DISPLAY RESULTS ----------
-
 if st.session_state["matches"]:
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
@@ -125,6 +106,26 @@ if st.session_state["matches"]:
         st.rerun()
 else:
     st.info("Ajoutez des matchs pour commencer le calcul.")
+
+
+
+
+uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
+
+if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
+    try:
+        loaded_data = json.load(uploaded_file)
+        if isinstance(loaded_data, list) and all(
+            isinstance(match, dict) for match in loaded_data
+        ):
+            st.session_state["matches"] = st.session_state["matches"] + loaded_data
+            st.success("✅ Matchs chargés avec succès !")
+            st.session_state["flag_uploaded_file"] = True
+        else:
+            st.error("❌ Fichier invalide.")
+    except Exception as e:
+        st.error(f"❌ Erreur lors du chargement du fichier: {e}")
+
 
 with st.form("match_form"):
     st.subheader("Ajouter un match")
