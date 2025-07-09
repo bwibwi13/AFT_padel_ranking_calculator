@@ -124,6 +124,8 @@ def generate_recommendation(
 def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
 
+    return tppwb_data
+
     # Sort by ascending order of "Date"
     #tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
 
@@ -148,10 +150,10 @@ def tppwb_matches(affiliation_number):
             "Partnerdoublevalue": item.get("Partnerdoublevalue"),
             #"classement_joueur": int(item.get("Doublepairvalue")) - int(item.get("Partnerdoublevalue")),
             
-            # "classement_partenaire": item.get("Partnerdoublevalue"),
-            # "classement_adversaire_1": item.get("Opponentdoublevalue1"),
-            # "classement_adversaire_2": item.get("Opponentdoublevalue2"),
-            # "categorie": item.get("Category", "MD100").replace("MD", "P"),
+             "classement_partenaire": item.get("Partnerdoublevalue"),
+             "classement_adversaire_1": item.get("Opponentdoublevalue1"),
+             "classement_adversaire_2": item.get("Opponentdoublevalue2"),
+             "categorie": item.get("Category", "MD100").replace("MD", "P"),
         }
         matches.append(match)
     return matches
