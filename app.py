@@ -33,13 +33,13 @@ with st.form("affiliation_form", clear_on_submit=False):
     if load_matches and affiliation_number:
         try:
             matches = tppwb_matches(affiliation_number)
-            # Debug: check the structure
-            # if isinstance(matches, list) and len(matches) > 0:
-            #     st.info(f"First element type: {type(matches[0])}")
-            #     st.write("First element:", matches[0])
-            # else:
-            #     st.warning("tppwb_data is not a non-empty list:")
-            #     st.write(matches)
+            Debug: check the structure
+            if isinstance(matches, list) and len(matches) > 0:
+                st.info(f"First element type: {type(matches[0])}")
+                st.write("First element:", matches[0])
+            else:
+                st.warning("tppwb_data is not a non-empty list:")
+                st.write(matches)
 
 
             if isinstance(matches, list):
