@@ -34,16 +34,20 @@ with st.form("affiliation_form", clear_on_submit=False):
         try:
             matches = tppwb_matches(affiliation_number)
             #Debug: check the structure
-            # if isinstance(matches, list) and len(matches) > 0:
-            #     st.info(f"First element type: {type(matches[0])}")
-            #     st.write("First element:", matches[0])
-            # else:
-            #     st.warning("tppwb_data is not a non-empty list:")
-            #     st.write(matches)
+            if isinstance(matches, list) and len(matches) > 0:
+                st.info(f"First element type: {type(matches[0])}")
+                st.write("First element:", matches[0])
+                st.info(f"Second element type: {type(matches[1])}")
+                st.write("Second element:", matches[1])
+                st.info(f"Third element type: {type(matches[2])}")
+                st.write("Third element:", matches[2])
+            else:
+                st.warning("tppwb_data is not a non-empty list:")
+                st.write(matches)
 
 
             if isinstance(matches, list):
-                st.session_state["matches"] = st.session_state["matches"] + matches
+                st.session_state["matches"] = matches
                 st.success("✅ Matchs chargés depuis le site TPPWB !")
                 st.session_state["flag_uploaded_file"] = True
             else:
