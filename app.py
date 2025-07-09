@@ -21,7 +21,7 @@ if "flag_uploaded_file" not in st.session_state:
 # ---------- Retrieve data from the TPPWB website ----------
 
 # Parse affiliation number from the URL GET parameters if provided
-affiliation_prefill = False
+affiliation_prefill = ""
 if hasattr(st, "query_params") and st.query_params:
     affiliation_prefill = st.query_params["affiliation_number"]
 
