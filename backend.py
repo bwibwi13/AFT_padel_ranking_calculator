@@ -144,9 +144,7 @@ def tppwb_matches(affiliation_number):
             "phase": "Tableau" if item.get("Drawtype")=="S" or item.get("Typetab")=="Tour Final" else "Poule",
             
             # Compute the category of the player
-            "Doublepairvalue": item.get("DoublePairValue"),
-            "Partnerdoublevalue": item.get("PartnerDoubleValue"),
-            #"classement_joueur": int(item.get("DoublePairValue")) - int(item.get("PartnerDoubleValue")),
+            "classement_joueur": int(item.get("DoublePairValue")) - int(item.get("PartnerDoubleValue")),
             
              "classement_partenaire": item.get("Partnerdoublevalue"),
              "classement_adversaire_1": item.get("OpponentDoubleValue1"),
