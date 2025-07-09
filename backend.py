@@ -124,12 +124,7 @@ def generate_recommendation(
 def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
 
-    # Debug: check the structure
-    if isinstance(tppwb_data, list) and len(tppwb_data) > 0:
-        print("First element type:", type(tppwb_data[0]))
-        print("First element:", tppwb_data[0])
-    else:
-        print("tppwb_data is not a non-empty list:", tppwb_data)
+    return tppwb_data
 
     # Sort by ascending order of "Date"
     #tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
