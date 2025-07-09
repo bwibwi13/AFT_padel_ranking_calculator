@@ -35,7 +35,7 @@ with st.form("affiliation_form", clear_on_submit=False):
     with col_btn:
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
-    if load_matches and affiliation_number:
+    if (load_matches and affiliation_number) or affiliation_prefill:
         # Reset session in case previous data exists
         st.session_state["matches"] = []
         st.session_state["flag_uploaded_file"] = False
@@ -111,7 +111,6 @@ if st.session_state["matches"]:
         st.rerun()
 else:
     st.info("Ajoutez des matchs pour commencer le calcul.")
-
 
 
 
