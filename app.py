@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
-from backend import compute_win_ratio, tppwb_matches, tppwb_raw_data
+from backend import compute_win_ratio, tppwb_matches
 
 st.set_page_config(
     page_title="Calculateur classement AFT padel", page_icon="🎾", layout="centered"
@@ -32,10 +32,6 @@ with st.form("affiliation_form", clear_on_submit=False):
 
     if load_matches and affiliation_number:
         try:
-            tppwb_raw_data_result, tppwb_url = tppwb_raw_data(affiliation_number)
-            st.expander("Afficher les données brutes TPPWB").write(tppwb_raw_data_result)
-            st.info(f"URL appelée : {tppwb_url}")
-
             matches = tppwb_matches(affiliation_number)
             if isinstance(matches, list):
                 st.session_state["matches"] = st.session_state["matches"] + matches

@@ -162,4 +162,4 @@ def tppwb_raw_data(affiliation_number):
     )
     response = requests.get(url)
     response.raise_for_status()
-    return response.json(), url
+    return response.json()
