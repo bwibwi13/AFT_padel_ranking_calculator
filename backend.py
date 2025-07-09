@@ -123,7 +123,6 @@ def generate_recommendation(
 # Get player results from TPPWB API and convert them to replace the JSON of this app
 def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
-    return tppwb_data
 
     # Sort by ascending order of "Date"
     #tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
@@ -146,12 +145,12 @@ def tppwb_matches(affiliation_number):
             
             # Compute the category of the player
             "Doublepairvalue": item.get("DoublePairValue"),
-            "Partnerdoublevalue": item.get("Partnerdoublevalue"),
-            #"classement_joueur": int(item.get("Doublepairvalue")) - int(item.get("Partnerdoublevalue")),
+            "Partnerdoublevalue": item.get("PartnerDoubleValue"),
+            #"classement_joueur": int(item.get("DoublePairValue")) - int(item.get("PartnerDoubleValue")),
             
              "classement_partenaire": item.get("Partnerdoublevalue"),
-             "classement_adversaire_1": item.get("Opponentdoublevalue1"),
-             "classement_adversaire_2": item.get("Opponentdoublevalue2"),
+             "classement_adversaire_1": item.get("OpponentDoubleValue1"),
+             "classement_adversaire_2": item.get("OpponentDoubleValue2"),
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
         }
         matches.append(match)
