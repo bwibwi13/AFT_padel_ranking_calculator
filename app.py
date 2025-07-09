@@ -18,7 +18,7 @@ if "matches" not in st.session_state:
 if "flag_uploaded_file" not in st.session_state:
     st.session_state["flag_uploaded_file"] = False
 
-# Retrieve data from the TPPWB website
+# ---------- Retrieve data from the TPPWB website ----------
 with st.form("affiliation_form", clear_on_submit=False):
     col_aff, col_btn = st.columns([1,2])
     with col_aff:
