@@ -135,15 +135,19 @@ def tppwb_matches(affiliation_number):
             # Guess the gender from the category
             "genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
 
-             "resultat": "Victoire" if item.get("Victoryordefeat")=="V" else "D\u00e9faite",
+            "resultat": "Victoire" if item.get("Victoryordefeat")=="V" else "D\u00e9faite",
             
-            # # Guess the type from the category
-             "type_competition": "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD") else "Mixte" if item.get("Category").startswith("MX") else "Interclubs",
+            # Guess the type from the category
+            "type_competition": "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD") else "Mixte" if item.get("Category").startswith("MX") else "Interclubs",
 
-            # # Guess the phase
-             "phase": "Tableau" if item.get("Drawtype")=="S" or item.get("Typetab")=="Tour Final" else "Poule",
+            # Guess the phase
+            "phase": "Tableau" if item.get("Drawtype")=="S" or item.get("Typetab")=="Tour Final" else "Poule",
             
-             "classement_joueur": int(item.get("Doublepairvalue")) - int(item.get("Partnerdoublevalue")),
+            # Compute the category of the player
+            "Doublepairvalue": item.get("Doublepairvalue"),
+            "Partnerdoublevalue": item.get("Partnerdoublevalue"),
+            #"classement_joueur": int(item.get("Doublepairvalue")) - int(item.get("Partnerdoublevalue")),
+            
             # "classement_partenaire": item.get("Partnerdoublevalue"),
             # "classement_adversaire_1": item.get("Opponentdoublevalue1"),
             # "classement_adversaire_2": item.get("Opponentdoublevalue2"),
