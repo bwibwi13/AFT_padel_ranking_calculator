@@ -38,19 +38,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         try:
             matches = tppwb_matches(affiliation_number)
             #Debug: check the structure
-            if isinstance(matches, list) and len(matches) > 7:
-                st.write("First element:", matches[0])
-                st.write("Second element:", matches[1])
-                st.write("Third element:", matches[2])
-                st.write("4th element:", matches[3])
-                st.write("5th element:", matches[4])
-                st.write("7th element:", matches[5])
-                st.write("7th element:", matches[6])
-                st.write("8th element:", matches[7])
-                st.write("9th element:", matches[8])
-            else:
-                st.warning("tppwb_data is not a non-empty list:")
-                st.write(matches)
+            #st.write(matches)
 
             if isinstance(matches, list):
                 st.success("✅ Matchs chargés depuis le site TPPWB !")

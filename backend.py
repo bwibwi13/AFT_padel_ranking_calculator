@@ -163,10 +163,10 @@ def tppwb_matches(affiliation_number):
     return matches
 
 # Get player results from TPPWB API based on affiliation number
-# https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-GetTournamentsResultsByPlayer_affiliationNumber_singleOrDouble_dateFrom_dateTo_splitVictoriesAndDefeats_splitSinglesAndDoubles
+# https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-GetResultsByPlayer_affiliationNumber_singleOrDouble_dateFrom_dateTo_top_splitVictoriesAndDefeats_splitSinglesAndDoubles
 def tppwb_raw_data(affiliation_number):
     url = (
-        "https://padel-webapi.tppwb.be/api/Players/GetTournamentsResultsByPlayer"
+        "https://padel-webapi.tppwb.be/api/Players/GetResultsByPlayer"
         f"?affiliationNumber={affiliation_number}"
         f"&singleOrDouble=D"
         f"&splitVictoriesAndDefeats=False"
