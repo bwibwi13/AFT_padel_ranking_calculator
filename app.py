@@ -20,7 +20,7 @@ if "flag_uploaded_file" not in st.session_state:
 
 # Retrieve data from the TPPWB website
 with st.form("affiliation_form", clear_on_submit=False):
-    col_aff, col_btn = st.columns(2)
+    col_aff, col_btn = st.columns([1,2])
     with col_aff:
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
@@ -28,7 +28,7 @@ with st.form("affiliation_form", clear_on_submit=False):
             max_chars=7,
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
-    with col_btn:
+    #with col_btn:
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
     if load_matches and affiliation_number:
