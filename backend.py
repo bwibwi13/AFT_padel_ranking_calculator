@@ -155,8 +155,9 @@ def tppwb_matches(affiliation_number):
 def tppwb_raw_data(affiliation_number):
     url = (
         f"https://padel-webapi.tppwb.be/api/Players/GetTournamentsResultsByPlayer/"
-        f"{affiliation_number}/{"D"}"/{"False"}/{"False"}
+        f"{affiliation_number}/{'D'}/{'False'}/{'False'}"
     )
+    print(f"[DEBUG] TPPWB API URL: {url}")  # Debug: print the URL called
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
