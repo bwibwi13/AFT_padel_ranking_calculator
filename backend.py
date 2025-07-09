@@ -125,7 +125,7 @@ def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
 
     # Sort by ascending order of "Date"
-    #tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
+    tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
 
     matches = []
     for item in tppwb_data:
@@ -144,7 +144,7 @@ def tppwb_matches(affiliation_number):
                 "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD")
                 else "Mixte" if item.get("Category").startswith("MX")
                 else "Interclubs"
-),
+            ),
 
             # Guess the phase
             "phase": "Tableau" if item.get("DrawType") is "S" or item.get("Typetab") is "Tour Final" else "Poule",
