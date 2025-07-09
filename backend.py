@@ -1,5 +1,6 @@
 # ---------- backend.py ----------
 import pandas as pd
+import requests
 
 PHASE_FACTORS = {
     "Poule": {"victoire": 1.0, "défaite": 1.0},
@@ -118,3 +119,44 @@ def generate_recommendation(
         return "\U0001f7e8 Montée de 1 niveau possible"
     else:
         return "\U00002b1c Maintien conseillé"
+
+# Get player results from TPPWB API and convert them to replace the JSON of this app
+def tppwb_matches(affiliation_number):
+    tppwb_data = tppwb_raw_data(affiliation_number)
+
+    # Sort by ascending order of "Date"
+    tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
+
+    matches = []
+    for item in tppwb_data:
+        match = {
+            # Guess the gender from the category
+            "genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
+
+            "resultat": "Victoire" if item.get("Victoryordefeat")=="V" else "Défaite",
+            
+            # Guess the type from the category
+            "type_competition": "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD") else "Mixte" if item.get("Category").startswith("MX") else "Interclubs",
+
+            # Guess the phase
+            "phase": "Tableau" if item.get("Drawtype")=="S" or item.get("Typetab")=="Tour Final" else "Poule",
+            
+            "classement_joueur": item.get("Doublepairvalue") - item.get("Partnerdoublevalue"),
+            "classement_partenaire": item.get("Partnerdoublevalue"),
+            "classement_adversaire_1": item.get("Opponentdoublevalue1"),
+            "classement_adversaire_2": item.get("Opponentdoublevalue2"),
+            "categorie": item.get("Category", "MD100").replace("MD", "P"),
+        }
+        matches.append(match)
+    return matches
+
+# Get player results from TPPWB API based on affiliation number
+# https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-GetTournamentsResultsByPlayer_affiliationNumber_singleOrDouble_dateFrom_dateTo_splitVictoriesAndDefeats_splitSinglesAndDoubles
+def tppwb_raw_data(affiliation_number):
+    url = (
+        f"https://padel-webapi.tppwb.be/api/Players/GetTournamentsResultsByPlayer/"
+        f"{affiliation_number}/{"D"}"/{"False"}/{"False"}
+    )
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
