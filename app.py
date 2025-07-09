@@ -53,6 +53,10 @@ with st.form("affiliation_form", clear_on_submit=False):
             #     st.write("7th element:", matches[5])
             #     st.info(f"7th element type: {type(matches[6])}")
             #     st.write("7th element:", matches[6])
+            #     st.info(f"8th element type: {type(matches[7])}")
+            #     st.write("8th element:", matches[7])
+            #     st.info(f"9th element type: {type(matches[8])}")
+            #     st.write("9th element:", matches[8])
             # else:
             #     st.warning("tppwb_data is not a non-empty list:")
             #     st.write(matches)
