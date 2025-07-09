@@ -54,7 +54,6 @@ with st.form("affiliation_form", clear_on_submit=False):
                 st.success("✅ Matchs chargés depuis le site TPPWB !")
                 st.session_state["matches"] = matches
                 st.session_state["flag_uploaded_file"] = True
-                st.rerun()
             else:
                 st.error("❌ Données reçues invalides.")
         except Exception as e:
