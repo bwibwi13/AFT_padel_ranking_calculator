@@ -133,7 +133,7 @@ def tppwb_matches(affiliation_number):
             continue  # skip non-dict items
         match = {
             # Guess the gender from the category
-            #"genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
+            "genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
 
              "resultat": "Victoire" if item.get("Victoryordefeat")=="V" else "Défaite",
             
