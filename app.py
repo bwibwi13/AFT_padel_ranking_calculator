@@ -31,6 +31,10 @@ with st.form("affiliation_form", clear_on_submit=False):
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
     if load_matches and affiliation_number:
+        # Reset session in case previous data exists
+        st.session_state["matches"] = []
+        st.session_state["flag_uploaded_file"] = False
+        
         try:
             matches = tppwb_matches(affiliation_number)
             #Debug: check the structure
@@ -47,9 +51,10 @@ with st.form("affiliation_form", clear_on_submit=False):
 
 
             if isinstance(matches, list):
-                st.session_state["matches"] = matches
                 st.success("✅ Matchs chargés depuis le site TPPWB !")
+                st.session_state["matches"] = matches
                 st.session_state["flag_uploaded_file"] = True
+                st.rerun()
             else:
                 st.error("❌ Données reçues invalides.")
         except Exception as e:
