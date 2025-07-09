@@ -53,27 +53,6 @@ if st.session_state["matches"]:
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
     df["coefficient_total"] = match_weights
-    st.subheader("📋 Vos matchs enregistrés")
-    st.dataframe(df)
-
-    col1, col2 = st.columns(2)
-    with col1:
-
-        if st.button("🗑️ Supprimer le dernier match encodé"):
-            if st.session_state["matches"]:
-                removed_match = st.session_state["matches"].pop()
-                st.success("Dernier match supprimé ✅")
-                st.rerun()
-            else:
-                st.warning("Aucun match à supprimer.")
-
-    with col2:
-        # Exporter les matchs au format JSON
-        if st.session_state["matches"]:
-            json_data = json.dumps(st.session_state["matches"], indent=2)
-            st.download_button(
-                "💾 Télécharger mes matchs", json_data, file_name="mes_matchs_AFT.json"
-            )
 
     st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
     st.markdown(f"### 📌 Recommandation : {recommendation}")
@@ -99,6 +78,27 @@ if st.session_state["matches"]:
     )
     ax.grid(True)
     st.pyplot(fig)
+
+    st.subheader("📋 Vos matchs enregistrés")
+    st.dataframe(df)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🗑️ Supprimer le dernier match encodé"):
+            if st.session_state["matches"]:
+                removed_match = st.session_state["matches"].pop()
+                st.success("Dernier match supprimé ✅")
+                st.rerun()
+            else:
+                st.warning("Aucun match à supprimer.")
+
+    with col2:
+        # Exporter les matchs au format JSON
+        if st.session_state["matches"]:
+            json_data = json.dumps(st.session_state["matches"], indent=2)
+            st.download_button(
+                "💾 Télécharger mes matchs", json_data, file_name="mes_matchs_AFT.json"
+            )
 
     if st.button("🔁 Réinitialiser le calcul"):
         st.session_state["matches"] = []
