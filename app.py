@@ -61,7 +61,6 @@ with st.form("affiliation_form", clear_on_submit=False):
             #     st.warning("tppwb_data is not a non-empty list:")
             #     st.write(matches)
 
-
             if isinstance(matches, list):
                 st.success("✅ Matchs chargés depuis le site TPPWB !")
                 st.session_state["matches"] = matches
