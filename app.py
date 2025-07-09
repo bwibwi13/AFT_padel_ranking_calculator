@@ -19,8 +19,13 @@ if "flag_uploaded_file" not in st.session_state:
     st.session_state["flag_uploaded_file"] = False
 
 # Retrieve data from the TPPWB website
-affiliation_number = st.text_input("Numéro d'affiliation AFT")
-if st.button("🔄 Charger mes matchs depuis TPPWB") and affiliation_number:
+col_aff, col_btn = st.columns([3, 1])
+with col_aff:
+    affiliation_number = st.text_input("Numéro d'affiliation AFT")
+with col_btn:
+    load_matches = st.button("⬇️ Charger mes matchs depuis le site TPPWB")
+
+if load_matches and affiliation_number:
     try:
         matches = tppwb_matches(affiliation_number)
         if isinstance(matches, list):
