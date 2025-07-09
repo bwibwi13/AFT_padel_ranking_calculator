@@ -34,11 +34,11 @@ with st.form("affiliation_form", clear_on_submit=False):
         try:
             matches = tppwb_matches(affiliation_number)
             # Debug: check the structure
-            if isinstance(tppwb_data, list) and len(tppwb_data) > 0:
-                print("First element type:", type(tppwb_data[0]))
-                print("First element:", tppwb_data[0])
+            if isinstance(matches, list) and len(matches) > 0:
+                print("First element type:", type(matches[0]))
+                print("First element:", matches[0])
             else:
-                print("tppwb_data is not a non-empty list:", tppwb_data)
+                print("tppwb_data is not a non-empty list:", matches)
 
 
             if isinstance(matches, list):
