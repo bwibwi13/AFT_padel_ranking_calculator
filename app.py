@@ -33,7 +33,7 @@ with st.form("affiliation_form", clear_on_submit=False):
     if load_matches and affiliation_number:
         try:
             matches = tppwb_matches(affiliation_number)
-            Debug: check the structure
+            #Debug: check the structure
             if isinstance(matches, list) and len(matches) > 0:
                 st.info(f"First element type: {type(matches[0])}")
                 st.write("First element:", matches[0])
