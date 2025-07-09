@@ -135,13 +135,13 @@ def tppwb_matches(affiliation_number):
             # Guess the gender from the category
             "genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
 
-            "resultat": "Victoire" if item.get("Victoryordefeat").startswith("V") else "D\u00e9faite",
+            "resultat": "Victoire" if item.get("VictoryOrDefeat") == ("V") else "D\u00e9faite",
             
             # Guess the type from the category
             "type_competition": "Tour" if item.get("Category").startswith("MD") or item.get("Category").startswith("WD") else "Mixte" if item.get("Category").startswith("MX") else "Interclubs",
 
             # Guess the phase
-            "phase": "Tableau" if item.get("Drawtype") is "S" or item.get("Typetab") is "Tour Final" else "Poule",
+            "phase": "Tableau" if item.get("DrawType") is "S" or item.get("Typetab") is "Tour Final" else "Poule",
             
             # Compute the category of the player
             "classement_joueur": int(item.get("DoublePairValue")) - int(item.get("PartnerDoubleValue")),
