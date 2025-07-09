@@ -160,7 +160,6 @@ def tppwb_raw_data(affiliation_number):
         f"&splitVictoriesAndDefeats=False"
         f"&splitSinglesAndDoubles=False"
     )
-    print(f"[DEBUG] TPPWB API URL: {url}")  # Debug: print the URL called
     response = requests.get(url)
     response.raise_for_status()
-    return response.json()
+    return response.json(), url
