@@ -130,6 +130,8 @@ def tppwb_matches(affiliation_number):
     matches = []
     for item in tppwb_data:
         if not isinstance(item, dict):
+            match = {"genre": "Erreur dict"}
+            matches.append(match)
             continue  # skip non-dict items
         match = {
             # Guess the gender from the category
