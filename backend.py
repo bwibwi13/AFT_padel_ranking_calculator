@@ -146,7 +146,7 @@ def tppwb_matches(affiliation_number):
             # Compute the category of the player
             "classement_joueur": int(item.get("DoublePairValue")) - int(item.get("PartnerDoubleValue")),
             
-             "classement_partenaire": item.get("Partnerdoublevalue"),
+             "classement_partenaire": item.get("PartnerDoubleValue"),
              "classement_adversaire_1": item.get("OpponentDoubleValue1"),
              "classement_adversaire_2": item.get("OpponentDoubleValue2"),
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
