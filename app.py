@@ -19,12 +19,18 @@ if "flag_uploaded_file" not in st.session_state:
     st.session_state["flag_uploaded_file"] = False
 
 # ---------- Retrieve data from the TPPWB website ----------
+
+# Parse affiliation number from the URL GET parameters if provided
+query_params = st.experimental_get_query_params()
+affiliation_prefill = query_params.get("affiliation_number", [""])[0]
+
 with st.form("affiliation_form", clear_on_submit=False):
     col_aff, col_btn = st.columns([1,2])
     with col_aff:
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
             max_chars=7,
+            value=affiliation_prefill,
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
     with col_btn:
