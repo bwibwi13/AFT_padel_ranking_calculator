@@ -19,28 +19,29 @@ if "flag_uploaded_file" not in st.session_state:
     st.session_state["flag_uploaded_file"] = False
 
 # Retrieve data from the TPPWB website
-col_aff, col_btn = st.columns(2)
-with col_aff:
-    affiliation_number = st.text_input(
-        "Numéro d'affiliation",
-        max_chars=7,
-        placeholder="1234567",
-        help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
-    )
-with col_btn:
-    load_matches = st.button("⬇️ Charger mes matchs depuis le site TPPWB")
+with st.form("affiliation_form", clear_on_submit=False):
+    col_aff, col_btn = st.columns(2)
+    with col_aff:
+        affiliation_number = st.text_input(
+            "Numéro d'affiliation",
+            min_chars=7,
+            max_chars=7,
+            help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
+        )
+    with col_btn:
+        load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
-if load_matches and affiliation_number:
-    try:
-        matches = tppwb_matches(affiliation_number)
-        if isinstance(matches, list):
-            st.session_state["matches"] = st.session_state["matches"] + matches
-            st.success("✅ Matchs chargés depuis le site TPPWB !")
-            st.session_state["flag_uploaded_file"] = True
-        else:
-            st.error("❌ Données reçues invalides.")
-    except Exception as e:
-        st.error(f"❌ Erreur lors de la récupération des données : {e}")
+    if load_matches and affiliation_number:
+        try:
+            matches = tppwb_matches(affiliation_number)
+            if isinstance(matches, list):
+                st.session_state["matches"] = st.session_state["matches"] + matches
+                st.success("✅ Matchs chargés depuis le site TPPWB !")
+                st.session_state["flag_uploaded_file"] = True
+            else:
+                st.error("❌ Données reçues invalides.")
+        except Exception as e:
+            st.error(f"❌ Erreur lors de la récupération des données : {e}")
 
 
 uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
