@@ -32,6 +32,11 @@ with st.form("affiliation_form", clear_on_submit=False):
 
     if load_matches and affiliation_number:
         try:
+            # Get raw data for debug
+            tppwb_raw_data = tppwb_matches(affiliation_number, raw=True) if "raw" in tppwb_matches.__code__.co_varnames else None
+            if tppwb_raw_data is not None:
+                st.expander("Afficher les données brutes TPPWB").write(tppwb_raw_data)
+
             matches = tppwb_matches(affiliation_number)
             if isinstance(matches, list):
                 st.session_state["matches"] = st.session_state["matches"] + matches
