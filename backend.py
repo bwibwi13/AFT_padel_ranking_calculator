@@ -85,7 +85,7 @@ def compute_win_ratio(df: pd.DataFrame) -> tuple:
         return 0.0, "Pas de matchs valides."
 
     ratio = round((total_points / total_weights) * 100, 2)
-    category = df["classement_joueur"].iloc[0]
+    category = "P" + str(df["classement_joueur"].iloc[0])
     gender = df["genre"].iloc[0]
     recommendation = generate_recommendation(ratio, len(df), category, gender)
     return ratio, recommendation, match_weights
