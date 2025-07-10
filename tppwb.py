@@ -65,4 +65,3 @@ def tppwb_player_info(affiliation_number):
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
-
