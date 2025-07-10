@@ -49,7 +49,7 @@ with st.form("affiliation_form", clear_on_submit=False):
                 #st.write(matches)   #Debug: check the structure
 
                 if isinstance(matches, list):
-                    st.success("✅ Matchs chargés depuis le site TPPWB !")
+                    st.success("✅ Matchs chargés !")
                     st.session_state["matches"] = matches
                     st.session_state["flag_uploaded_file"] = True
                 else:
@@ -63,7 +63,7 @@ if len(affiliation_number) == 7:
         player_infos = tppwb_player_info(affiliation_number)
         player_info = player_infos[0]
         if player_info:
-            st.info(f"**Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
+            st.info(f"# **Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
         else:
             st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
     except Exception as e:
@@ -77,7 +77,7 @@ if st.session_state["matches"]:
     df["coefficient_total"] = match_weights
 
     st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
-    st.info(f"### 📌 Recommandation : {recommendation}")
+    st.info(f"# 📌 Recommandation : {recommendation}")
 
     # ---------- PLOT RATIO EVOLUTION ----------
     st.subheader("📈 Évolution du ratio de victoire")
