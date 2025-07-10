@@ -42,8 +42,8 @@ with st.form("affiliation_form", clear_on_submit=False):
         #     except Exception as e:
         #         st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
         #         player_info = {}
-            
-             st.info(f"**Joueur :** {firstname} {name} ({rank})")
+
+            st.info(f"**Joueur :** {firstname} {name} ({rank})")
         
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
