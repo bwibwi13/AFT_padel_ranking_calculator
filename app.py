@@ -40,11 +40,12 @@ with st.form("affiliation_form", clear_on_submit=False):
             try:
                 player_info = tppwb_player_info(affiliation_number)
                 if player_info:
-                    st.info(f"**Joueur :** {player_info.get("FirstName")} {player_info.get("Name")} ({player_info.get("Rank")})")
+                    st.info(f"**Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
                 else:
                     st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
             except Exception as e:
                 st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
+                st.write(player_info)
                 player_info = {}
         
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")

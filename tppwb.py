@@ -64,8 +64,5 @@ def tppwb_player_info(affiliation_number):
     )
     response = requests.get(url)
     response.raise_for_status()
-    data = response.json()
-    
-    if data and isinstance(data, list):
-        return data.get("Prenom"), data.get("Nom"), data.get("ClasmtDouble")
-    return None
+    return response.json()
+
