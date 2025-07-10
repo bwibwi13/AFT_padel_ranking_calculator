@@ -36,7 +36,7 @@ with st.form("affiliation_form", clear_on_submit=False):
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
     with col_btn:
-        if len(affiliation_number) == 7:
+        #if len(affiliation_number) == 7:
             try:
                 firstname, name, rank = tppwb_player_info(affiliation_number)
             except Exception as e:
