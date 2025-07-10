@@ -40,7 +40,7 @@ with st.form("affiliation_form", clear_on_submit=False):
             try:
                 player_info = tppwb_player_info(affiliation_number)
                 if player_info:
-                    st.info(f"**Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
+                    st.info(f"**Joueur :** {player_info[0].get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
                 else:
                     st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
             except Exception as e:
