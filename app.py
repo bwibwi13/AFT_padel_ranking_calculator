@@ -39,19 +39,6 @@ with st.form("affiliation_form", clear_on_submit=False):
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
     with col_btn:
-        if len(affiliation_number) == 7:
-            try:
-                player_infos = tppwb_player_info(affiliation_number)
-                player_info = player_infos[0]
-                if player_info:
-                    st.info(f"**Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
-                else:
-                    st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
-            except Exception as e:
-                st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
-                st.write(player_info)
-                player_info = {}
-
         if (load_matches and affiliation_number) or affiliation_prefill:
             # Reset session in case previous data exists
             st.session_state["matches"] = []
@@ -71,13 +58,26 @@ with st.form("affiliation_form", clear_on_submit=False):
                 st.error(f"❌ Erreur lors de la récupération des données : {e}")
 
 # ---------- DISPLAY RESULTS ----------
+if len(affiliation_number) == 7:
+    try:
+        player_infos = tppwb_player_info(affiliation_number)
+        player_info = player_infos[0]
+        if player_info:
+            st.info(f"**Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
+        else:
+            st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
+    except Exception as e:
+        st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
+        st.write(player_info)
+        player_info = {}
+
 if st.session_state["matches"]:
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
     df["coefficient_total"] = match_weights
 
     st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
-    st.markdown(f"### 📌 Recommandation : {recommendation}")
+    st.info(f"### 📌 Recommandation : {recommendation}")
 
     # ---------- PLOT RATIO EVOLUTION ----------
     st.subheader("📈 Évolution du ratio de victoire")
