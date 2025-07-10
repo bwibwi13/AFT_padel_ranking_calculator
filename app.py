@@ -27,7 +27,7 @@ if hasattr(st, "query_params") and st.query_params:
     affiliation_prefill = st.query_params.get("affiliation_number")
 
 with st.form("affiliation_form", clear_on_submit=False):
-    col_aff, col_btn = st.columns([1,2])
+    col_aff, col_btn = st.columns([1,1])
     with col_aff:
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
@@ -35,6 +35,9 @@ with st.form("affiliation_form", clear_on_submit=False):
             value=affiliation_prefill,
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
+
+        load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
+
     with col_btn:
         if len(affiliation_number) == 7:
             try:
@@ -48,26 +51,24 @@ with st.form("affiliation_form", clear_on_submit=False):
                 st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
                 st.write(player_info)
                 player_info = {}
-        
-        load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
-    if (load_matches and affiliation_number) or affiliation_prefill:
-        # Reset session in case previous data exists
-        st.session_state["matches"] = []
-        st.session_state["flag_uploaded_file"] = False
-        
-        try:
-            matches = tppwb_matches(affiliation_number)
-            #st.write(matches)   #Debug: check the structure
+        if (load_matches and affiliation_number) or affiliation_prefill:
+            # Reset session in case previous data exists
+            st.session_state["matches"] = []
+            st.session_state["flag_uploaded_file"] = False
+            
+            try:
+                matches = tppwb_matches(affiliation_number)
+                #st.write(matches)   #Debug: check the structure
 
-            if isinstance(matches, list):
-                st.success("✅ Matchs chargés depuis le site TPPWB !")
-                st.session_state["matches"] = matches
-                st.session_state["flag_uploaded_file"] = True
-            else:
-                st.error("❌ Données reçues invalides.")
-        except Exception as e:
-            st.error(f"❌ Erreur lors de la récupération des données : {e}")
+                if isinstance(matches, list):
+                    st.success("✅ Matchs chargés depuis le site TPPWB !")
+                    st.session_state["matches"] = matches
+                    st.session_state["flag_uploaded_file"] = True
+                else:
+                    st.error("❌ Données reçues invalides.")
+            except Exception as e:
+                st.error(f"❌ Erreur lors de la récupération des données : {e}")
 
 # ---------- DISPLAY RESULTS ----------
 if st.session_state["matches"]:
