@@ -27,7 +27,7 @@ if hasattr(st, "query_params") and st.query_params:
     affiliation_prefill = st.query_params.get("affiliation_number")
 
 with st.form("affiliation_form", clear_on_submit=False):
-    col_aff, col_btn = st.columns([1,1])
+    col_aff, col_btn = st.columns([3,2])
     with col_aff:
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
