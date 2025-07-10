@@ -59,8 +59,6 @@ with st.form("affiliation_form", clear_on_submit=False):
 
 # ---------- DISPLAY RESULTS ----------
 if len(affiliation_number) == 7:
-    st.write("Affiliation number:", affiliation_number)
-
     try:
         player_infos = tppwb_player_info(affiliation_number)
         player_info = player_infos[0] if isinstance(player_infos, list) and player_infos else None
@@ -74,6 +72,9 @@ if len(affiliation_number) == 7:
         player_info = {}
 
 if st.session_state["matches"]:
+    # DEBUG
+    st.write(st.session_state["matches"])
+
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
     df["coefficient_total"] = match_weights

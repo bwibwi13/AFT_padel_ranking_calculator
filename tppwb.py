@@ -39,6 +39,8 @@ def tppwb_matches(affiliation_number):
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
         }
         matches.append(match)
+
+        # Search if there was a change
     return matches
 
 # Get player results from TPPWB API based on affiliation number
