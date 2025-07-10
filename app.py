@@ -36,14 +36,14 @@ with st.form("affiliation_form", clear_on_submit=False):
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
     with col_btn:
-        if true: #len(affiliation_number) == 7:
-            try:
-                firstname, name, rank = tppwb_player_info(affiliation_number)
-            except Exception as e:
-                st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
-                player_info = {}
+        # if true: #len(affiliation_number) == 7:
+        #     try:
+        #         firstname, name, rank = tppwb_player_info(affiliation_number)
+        #     except Exception as e:
+        #         st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
+        #         player_info = {}
             
-            st.info(f"**Joueur :** {firstname} {name} ({rank})")
+        #     st.info(f"**Joueur :** {firstname} {name} ({rank})")
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
     if (load_matches and affiliation_number) or affiliation_prefill:
