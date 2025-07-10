@@ -60,6 +60,8 @@ with col_btn:
 
 # ---------- DISPLAY RESULTS ----------
 if len(affiliation_number) == 7:
+    st.write("Affiliation number:", affiliation_number)
+    
     try:
         player_infos = tppwb_player_info(affiliation_number)
         player_info = player_infos[0] if isinstance(player_infos, list) and player_infos else None
