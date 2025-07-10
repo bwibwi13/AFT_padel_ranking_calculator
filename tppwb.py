@@ -7,6 +7,8 @@ def tppwb_matches(affiliation_number):
     # Sort by ascending order of "Date"
     tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
 
+    return tppwb_data
+
     matches = []
     for item in tppwb_data:
         if not isinstance(item, dict):
