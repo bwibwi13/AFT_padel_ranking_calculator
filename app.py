@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from backend import compute_win_ratio, tppwb_matches
+from ttpwb import tppwb_matches
 
 st.set_page_config(
     page_title="Calculateur classement AFT padel", page_icon="🎾", layout="centered"
