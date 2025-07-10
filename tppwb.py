@@ -54,3 +54,18 @@ def tppwb_raw_data(affiliation_number):
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
+
+# Get player info from TPPWB API (Name, FirstName, Rank)
+# https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-SearchPlayerForAutoComplete_searchText_isNumFed
+def tppwb_player_info(affiliation_number):
+    url = (
+        "https://padel-webapi.tppwb.be/api/Players/SearchPlayerForAutoComplete"
+        f"?searchText={affiliation_number}&isNumFed=true"
+    )
+    response = requests.get(url)
+    response.raise_for_status()
+    data = response.json()
+    
+    if data and isinstance(data, list):
+        return data.get("Prenom"), data.get("Nom"), data.get("ClasmtDouble")
+    return None
