@@ -38,9 +38,10 @@ with st.form("affiliation_form", clear_on_submit=False):
     with col_btn:
         if len(affiliation_number) == 7:
             try:
-                player_info = tppwb_player_info(affiliation_number)
+                player_infos = tppwb_player_info(affiliation_number)
+                player_info = player_infos[0]
                 if player_info:
-                    st.info(f"**Joueur :** {player_info[0].get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
+                    st.info(f"**Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
                 else:
                     st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
             except Exception as e:
