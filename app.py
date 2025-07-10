@@ -73,7 +73,7 @@ if len(affiliation_number) == 7:
 
 if st.session_state["matches"]:
     # DEBUG
-    st.write(st.session_state["matches"])
+    #st.write(st.session_state["matches"])
 
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
