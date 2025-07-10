@@ -24,7 +24,7 @@ if "flag_uploaded_file" not in st.session_state:
 # Parse affiliation number from the URL GET parameters if provided
 affiliation_prefill = ""
 if hasattr(st, "query_params") and st.query_params:
-    affiliation_prefill = st.query_params["affiliation_number"]
+    affiliation_prefill = st.query_params.get("affiliation_number")
 
 with st.form("affiliation_form", clear_on_submit=False):
     col_aff, col_btn = st.columns([1,2])
@@ -36,13 +36,16 @@ with st.form("affiliation_form", clear_on_submit=False):
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
     with col_btn:
-        if True: #len(affiliation_number) == 7:
+        if len(affiliation_number) == 7:
             try:
-                firstname, name, rank = tppwb_player_info(affiliation_number)
+                player_info = tppwb_player_info(affiliation_number)
+                if player_info:
+                    st.info(f"**Joueur :** {player_info.get("FirstName")} {player_info.get("Name")} ({player_info.get("Rank")})")
+                else:
+                    st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
             except Exception as e:
                 st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
                 player_info = {}
-            st.info(f"**Joueur :** {firstname} {name} ({rank})")
         
         load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
 
