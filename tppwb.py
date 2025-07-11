@@ -44,12 +44,24 @@ def tppwb_matches(affiliation_number):
 # Get player results from TPPWB API based on affiliation number
 # https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-GetResultsByPlayer_affiliationNumber_singleOrDouble_dateFrom_dateTo_top_splitVictoriesAndDefeats_splitSinglesAndDoubles
 def tppwb_raw_data(affiliation_number):
+    # Use the begining of the previous semester as start date for the matches results
+    # (Category change will be computed at the end of the semester, based on the last 12 months at most)
+    today = datetime.date.today()
+    if today.month <= 6:
+        # January to June: use July 1st of the previous year
+        date_from = datetime.date(today.year - 1, 7, 1)
+    else:
+        # July to December: use January 1st of the current year
+        date_from = datetime.date(today.year, 1, 1)
+    
+
     url = (
         "https://padel-webapi.tppwb.be/api/Players/GetResultsByPlayer"
         f"?affiliationNumber={affiliation_number}"
         f"&singleOrDouble=D"
         f"&splitVictoriesAndDefeats=False"
         f"&splitSinglesAndDoubles=False"
+        f"&dateFrom={date_from.strftime('%d%m%Y')}"
     )
     response = requests.get(url)
     response.raise_for_status()
