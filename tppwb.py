@@ -56,7 +56,7 @@ def tppwb_matches(affiliation_number):
                 semester_start = datetime.date(today.year, 7, 1)
             
             # Filter matches to keep only those from the current semester
-            matches = [m for m in matches if datetime.datetime.strptime(m["date"], "%d/%m/%Y").date() >= semester_start]
+            matches = [m for m in matches if datetime.datetime.strptime(m["date"], "%Y-%m-%dT%H:%M:%S").date() >= semester_start]
             category_change = True
         else:
             category_change = False
