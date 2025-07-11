@@ -45,13 +45,18 @@ with st.form("affiliation_form", clear_on_submit=False):
             st.session_state["flag_uploaded_file"] = False
             
             try:
-                matches = tppwb_matches(affiliation_number)
+                matches, category_change = tppwb_matches(affiliation_number)
                 #st.write(matches)   #Debug: check the structure
 
                 if isinstance(matches, list):
                     st.success("✅ Matchs chargés !")
                     st.session_state["matches"] = matches
                     st.session_state["flag_uploaded_file"] = True
+                    if category_change:
+                        st.info(
+                            "⚠️ On détecte un changement de catégorie. "
+                            "On ne regarde que les résultats du semestre en cours."
+                        )
                 else:
                     st.error("❌ Données reçues invalides.")
             except Exception as e:
@@ -61,7 +66,7 @@ with st.form("affiliation_form", clear_on_submit=False):
 if len(affiliation_number) == 7:
     try:
         player_infos = tppwb_player_info(affiliation_number)
-        player_info = player_infos[0]
+        player_info = player_infos[0] if isinstance(player_infos, list) and player_infos else None
         if player_info:
             st.info(f"### **Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
         else:
@@ -72,6 +77,9 @@ if len(affiliation_number) == 7:
         player_info = {}
 
 if st.session_state["matches"]:
+    # DEBUG
+    #st.write(st.session_state["matches"])
+
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
     df["coefficient_total"] = match_weights
