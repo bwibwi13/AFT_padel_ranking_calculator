@@ -45,13 +45,18 @@ with st.form("affiliation_form", clear_on_submit=False):
             st.session_state["flag_uploaded_file"] = False
             
             try:
-                matches = tppwb_matches(affiliation_number)
+                matches, category_change = tppwb_matches(affiliation_number)
                 #st.write(matches)   #Debug: check the structure
 
                 if isinstance(matches, list):
                     st.success("✅ Matchs chargés !")
                     st.session_state["matches"] = matches
                     st.session_state["flag_uploaded_file"] = True
+                    if category_change:
+                        st.info(
+                            "⚠️ On détecte un changement de catégorie. "
+                            "On ne regarde que les résultats du semestre en cours."
+                        )
                 else:
                     st.error("❌ Données reçues invalides.")
             except Exception as e:

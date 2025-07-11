@@ -1,6 +1,10 @@
 import requests
 import datetime
 
+def has_multiple_classement_joueur(matches):
+    unique_values = set(match.get("classement_joueur") for match in matches if "classement_joueur" in match)
+    return len(unique_values) > 1
+
 # Get player results from TPPWB API and convert them to replace the JSON of this app
 def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
@@ -38,12 +42,26 @@ def tppwb_matches(affiliation_number):
              "classement_adversaire_1": item.get("OpponentDoubleValue1"),
              "classement_adversaire_2": item.get("OpponentDoubleValue2"),
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
+             "date": item.get("Date"),
         }
         matches.append(match)
 
-        # Search if there was a change of level in the past
-        # TODO
-    return matches
+        # Ignore results of past semester if there was a category change
+        if has_multiple_classement_joueur(matches):
+            # Determine the start date of the current semester
+            today = datetime.date.today()
+            if today.month <= 6:
+                semester_start = datetime.date(today.year, 1, 1)
+            else:
+                semester_start = datetime.date(today.year, 7, 1)
+            
+            # Filter matches to keep only those from the current semester
+            matches = [m for m in matches if datetime.datetime.strptime(m["date"], "%d/%m/%Y").date() >= semester_start]
+            category_change = True
+        else:
+            category_change = False
+        
+    return matches, category_change
 
 # Get player results from TPPWB API based on affiliation number
 # https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-GetResultsByPlayer_affiliationNumber_singleOrDouble_dateFrom_dateTo_top_splitVictoriesAndDefeats_splitSinglesAndDoubles
