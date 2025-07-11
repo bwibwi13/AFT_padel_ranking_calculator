@@ -83,7 +83,7 @@ def tppwb_raw_data(affiliation_number):
         f"&singleOrDouble=D"
         f"&splitVictoriesAndDefeats=False"
         f"&splitSinglesAndDoubles=False"
-        f"&dateFrom={date_from.strftime('%d/%m/%Y')}"
+        f"&dateFrom={date_from.strftime('%d%m%Y')}"
     )
     print(url)
     response = requests.get(url)
