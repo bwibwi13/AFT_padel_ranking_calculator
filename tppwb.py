@@ -44,6 +44,9 @@ def tppwb_matches(affiliation_number):
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
              "date": item.get("Date"),
         }
+        # Default to the same ranking for the 2 opponents if one is missing
+        if match["classement_adversaire_1"] == 0:
+            match["classement_adversaire_1"] = match["classement_adversaire_2"]
         if match["classement_adversaire_2"] == 0:
             match["classement_adversaire_2"] = match["classement_adversaire_1"]
         matches.append(match)
