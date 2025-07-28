@@ -46,7 +46,7 @@ with st.form("affiliation_form", clear_on_submit=False):
             
             try:
                 matches, category_change = tppwb_matches(affiliation_number)
-                #st.write(matches)   #Debug: check the structure
+                st.write(matches)
 
                 if isinstance(matches, list):
                     st.success("✅ Matchs chargés !")
@@ -78,7 +78,7 @@ if len(affiliation_number) == 7:
 
 if st.session_state["matches"]:
     # DEBUG
-    st.write(st.session_state["matches"])
+    #st.write(st.session_state["matches"])
 
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
