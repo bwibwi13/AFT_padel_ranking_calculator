@@ -52,19 +52,19 @@ def tppwb_matches(affiliation_number):
         matches.append(match)
 
     # Ignore results of past semester if there was a category change
-    if has_multiple_classement_joueur(matches):
-        # Determine the start date of the current semester
-        today = datetime.date.today()
-        if today.month <= 6:
-            semester_start = datetime.date(today.year, 1, 1)
-        else:
-            semester_start = datetime.date(today.year, 7, 1)
+    # if has_multiple_classement_joueur(matches):
+    #     # Determine the start date of the current semester
+    #     today = datetime.date.today()
+    #     if today.month <= 6:
+    #         semester_start = datetime.date(today.year, 1, 1)
+    #     else:
+    #         semester_start = datetime.date(today.year, 7, 1)
         
-        # Filter matches to keep only those from the current semester
-        matches = [m for m in matches if datetime.datetime.strptime(m["date"], "%Y-%m-%dT%H:%M:%S").date() >= semester_start]
-        category_change = True
-    else:
-        category_change = False
+    #     # Filter matches to keep only those from the current semester
+    #     matches = [m for m in matches if datetime.datetime.strptime(m["date"], "%Y-%m-%dT%H:%M:%S").date() >= semester_start]
+    #     category_change = True
+    # else:
+    #     category_change = False
         
     return matches, category_change
 
