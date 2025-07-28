@@ -8,7 +8,7 @@ def has_multiple_classement_joueur(matches):
 # Get player results from TPPWB API and convert them to replace the JSON of this app
 def tppwb_matches(affiliation_number):
     tppwb_data = tppwb_raw_data(affiliation_number)
-    return tppwb_data, False
+    #return tppwb_data, False
 
     # Sort by ascending order of "Date"
     tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
@@ -34,17 +34,18 @@ def tppwb_matches(affiliation_number):
 
             # Guess the phase
             "phase": "Tableau" if item.get("DrawType") == "S" or item.get("TypeTab") == "Tour Final" else "Poule",
-            #"phase": item.get("TypeTab"),
             
             # Compute the category of the player
-            "classement_joueur": int(item.get("DoublePairValue", 0)) - int(item.get("PartnerDoubleValue", 0)),
-            
-             "classement_partenaire": int(item.get("PartnerDoubleValue", "0")),
-             "classement_adversaire_1": int(item.get("OpponentDoubleValue1", "0")),
-             "classement_adversaire_2": int(item.get("OpponentDoubleValue2", "0")),
+            "classement_joueur": int(item.get("DoublePairValue", "0")) - int(item.get("PartnerDoubleValue", "0")),
+
+             "classement_partenaire":   int(item.get("PartnerDoubleValue", "0"))   if str(item.get("PartnerDoubleValue", "0")).isdigit() else 0,
+             "classement_adversaire_1": int(item.get("OpponentDoubleValue1", "0")) if str(item.get("OpponentDoubleValue1", "0")).isdigit() else 0,
+             "classement_adversaire_2": int(item.get("OpponentDoubleValue2", "0")) if str(item.get("OpponentDoubleValue2", "0")).isdigit() else 0,
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
              "date": item.get("Date"),
         }
+        if match["classement_adversaire_2"] == 0:
+            match["classement_adversaire_2"] = match["classement_adversaire_1"]
         matches.append(match)
 
         # Ignore results of past semester if there was a category change
