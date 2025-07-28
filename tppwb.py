@@ -36,11 +36,11 @@ def tppwb_matches(affiliation_number):
             #"phase": item.get("TypeTab"),
             
             # Compute the category of the player
-            "classement_joueur": int(item.get("DoublePairValue")) - int(item.get("PartnerDoubleValue")),
+            "classement_joueur": int(item.get("DoublePairValue", 0)) - int(item.get("PartnerDoubleValue", 0)),
             
-             "classement_partenaire": item.get("PartnerDoubleValue"),
-             "classement_adversaire_1": item.get("OpponentDoubleValue1"),
-             "classement_adversaire_2": item.get("OpponentDoubleValue2"),
+             "classement_partenaire": int(item.get("PartnerDoubleValue", "0")),
+             "classement_adversaire_1": int(item.get("OpponentDoubleValue1", "0")),
+             "classement_adversaire_2": int(item.get("OpponentDoubleValue2", "0")),
              "categorie": item.get("Category", "MD100").replace("MD", "P"),
              "date": item.get("Date"),
         }
