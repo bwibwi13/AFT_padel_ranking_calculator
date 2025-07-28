@@ -87,7 +87,6 @@ def tppwb_raw_data(affiliation_number):
         f"&splitSinglesAndDoubles=False"
         f"&dateFrom={date_from.strftime('%d%m%Y')}"
     )
-    print(url)
     response = requests.get(url)
     response.raise_for_status()
     return response.json()

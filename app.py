@@ -46,7 +46,7 @@ with st.form("affiliation_form", clear_on_submit=False):
             
             try:
                 matches, category_change = tppwb_matches(affiliation_number)
-                st.write(matches)
+                #st.write(matches)
 
                 if isinstance(matches, list):
                     st.success("✅ Matchs chargés !")
