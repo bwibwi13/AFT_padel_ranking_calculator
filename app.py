@@ -49,14 +49,17 @@ with st.form("affiliation_form", clear_on_submit=False):
                 #st.write(matches)
 
                 if isinstance(matches, list):
-                    st.success("✅ Matchs chargés !")
-                    st.session_state["matches"] = matches
-                    st.session_state["flag_uploaded_file"] = True
-                    if category_change:
-                        st.info(
-                            "⚠️ On détecte un changement de catégorie. "
-                            "On ne regarde que les résultats du semestre en cours."
-                        )
+                    if len(matches) > 0:
+                        st.success("✅ Matchs chargés !")
+                        st.session_state["matches"] = matches
+                        st.session_state["flag_uploaded_file"] = True
+                        if category_change:
+                            st.info(
+                                "⚠️ On détecte un changement de catégorie. "
+                                "On ne regarde que les résultats du semestre en cours."
+                            )
+                    else:
+                        st.warning("⚠️ Données récupérées mais pas de résultats encodés..")
                 else:
                     st.error("❌ Données reçues invalides.")
             except Exception as e:
