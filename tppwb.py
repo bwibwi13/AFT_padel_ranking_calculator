@@ -64,7 +64,7 @@ def tppwb_matches(affiliation_number):
     #     matches = [m for m in matches if datetime.datetime.strptime(m["date"], "%Y-%m-%dT%H:%M:%S").date() >= semester_start]
     #     category_change = True
     # else:
-    #     category_change = False
+    category_change = False
         
     return matches, category_change
 
