@@ -6,25 +6,25 @@ PHASE_FACTORS = {
     "Tableau": {"victoire": 1.25, "défaite": 0.75},
 }
 
-COMPETITION_FACTORS = {"Tour": 1.0, "Interclubs": 0.9, "Mixte": 0.8, "Masters": 1.1}
+COMPETITION_FACTORS = {"Tour": 1.0, "Interclubs": 1.0, "Mixte": 0.8, "Masters": 1.2}
 
 RANKING_THRESHOLDS_MEN = {
-    "P100": {"drop": 40, "up1": 40, "up2": 90},
-    "P200": {"drop": 15, "up1": 50, "up2": 90},
-    "P300": {"drop": 20, "up1": 55, "up2": 90},
-    "P400": {"drop": 25, "up1": 60, "up2": 100},
-    "P500": {"drop": 30, "up1": 65, "up2": 100},
-    "P700": {"drop": 35, "up1": 70, "up2": 100},
+    "P100": {"drop": 0, "up1": 50, "up2": 90},
+    "P200": {"drop": 20, "up1": 55, "up2": 90},
+    "P300": {"drop": 25, "up1": 60, "up2": 100},
+    "P400": {"drop": 30, "up1": 65, "up2": 100},
+    "P500": {"drop": 30, "up1": 70, "up2": 100},
+    "P700": {"drop": 35, "up1": 75, "up2": 100},
     "P1000": {"drop": 35, "up1": 35, "up2": 100},
 }
 
 RANKING_THRESHOLDS_WOMEN = {
-    "P50": {"drop": 40, "up1": 40, "up2": 90},
-    "P100": {"drop": 15, "up1": 50, "up2": 90},
-    "P200": {"drop": 20, "up1": 60, "up2": 100},
-    "P300": {"drop": 25, "up1": 60, "up2": 100},
-    "P400": {"drop": 25, "up1": 75, "up2": 100},
-    "P500": {"drop": 25, "up1": 25, "up2": 100},
+    "P50": {"drop": 0, "up1": 50, "up2": 90},
+    "P100": {"drop": 5, "up1": 55, "up2": 90},
+    "P200": {"drop": 25, "up1": 60, "up2": 100},
+    "P300": {"drop": 25, "up1": 65, "up2": 100},
+    "P400": {"drop": 30, "up1": 70, "up2": 100},
+    "P500": {"drop": 30, "up1": 75, "up2": 100},
 }
 
 
@@ -100,11 +100,8 @@ def generate_recommendation(
         else RANKING_THRESHOLDS_MEN
     )
 
-    # Seulement 6 matchs nécessaires dans certains cas sinon 10
-    special_min_match = (gender.lower() == "dames" and category in ["P400", "P500"]) or (
-        gender.lower() == "messieurs" and category == "P1000"
-    )
-    required_matches = 6 if special_min_match else 10
+    # Seulement 12 matchs nécessaires sauf si montée de 2 classements alors 24 sont nécessaires
+    required_matches = 12
 
     if category not in thresholds or match_count < required_matches:
         return f"❕ Pas de recommandation (catégorie inconnue ou <{required_matches} matchs)."
