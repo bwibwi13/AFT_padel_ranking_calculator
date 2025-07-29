@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from backend import compute_win_ratio
+from tppwb import tppwb_matches, tppwb_player_info
 
 st.set_page_config(
     page_title="Calculateur classement AFT padel", page_icon="🎾", layout="centered"
@@ -17,6 +18,154 @@ if "matches" not in st.session_state:
 
 if "flag_uploaded_file" not in st.session_state:
     st.session_state["flag_uploaded_file"] = False
+
+# ---------- Retrieve data from the TPPWB website ----------
+
+# Parse affiliation number from the URL GET parameters if provided
+affiliation_prefill = ""
+if hasattr(st, "query_params") and st.query_params:
+    affiliation_prefill = st.query_params.get("affiliation_number")
+
+with st.form("affiliation_form", clear_on_submit=False):
+    col_aff, col_btn = st.columns([3,2])
+    with col_aff:
+        affiliation_number = st.text_input(
+            "Numéro d'affiliation",
+            max_chars=7,
+            value=affiliation_prefill,
+            help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
+        )
+
+        load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
+
+    with col_btn:
+        if (load_matches and affiliation_number) or affiliation_prefill:
+            # Reset session in case previous data exists
+            st.session_state["matches"] = []
+            st.session_state["flag_uploaded_file"] = False
+            
+            try:
+                matches, category_change = tppwb_matches(affiliation_number)
+                st.write(matches)
+
+                if isinstance(matches, list):
+                    if len(matches) > 0:
+                        st.success("✅ Matchs chargés !")
+                        st.session_state["matches"] = matches
+                        st.session_state["flag_uploaded_file"] = True
+                        if category_change:
+                            st.info(
+                                "⚠️ On détecte un changement de catégorie. "
+                                "On ne regarde que les résultats du semestre en cours."
+                            )
+                    else:
+                        st.warning("⚠️ Données récupérées mais pas de résultats encodés..")
+                else:
+                    st.error("❌ Données reçues invalides.")
+            except Exception as e:
+                st.error(f"❌ Erreur lors de la récupération des données : {e}")
+
+# ---------- DISPLAY RESULTS ----------
+if len(affiliation_number) == 7:
+    try:
+        player_infos = tppwb_player_info(affiliation_number)
+        player_info = player_infos[0] if isinstance(player_infos, list) and player_infos else None
+        if player_info:
+            st.info(f"### **Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
+        else:
+            st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
+    except Exception as e:
+        st.error(f"❌ Erreur lors de la récupération des informations du joueur : {e}")
+        st.write(player_info)
+        player_info = {}
+
+if st.session_state["matches"]:
+    # DEBUG
+    #st.write(st.session_state["matches"])
+
+    df = pd.DataFrame(st.session_state["matches"])
+    win_ratio, recommendation, match_weights = compute_win_ratio(df)
+    df["coefficient_total"] = match_weights
+
+    st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
+    st.info(f"📌 Recommandation : {recommendation}")
+
+    # ---------- PLOT RATIO EVOLUTION ----------
+    st.subheader("📈 Évolution du ratio de victoire")
+    ratios = []
+    for i in range(1, len(df) + 1):
+        sub_df = df.iloc[:i]
+        ratio, _, _ = compute_win_ratio(sub_df)
+        ratios.append(ratio)
+
+    fig, ax = plt.subplots()
+    ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
+    ax.set_xticks(
+        [
+            (
+                range(1, len(ratios) + 1)
+                if len(ratios) + 1 <= 20
+                else range(1, len(ratios) + 1, 5)
+            )
+        ]
+    )
+    ax.set_xlabel("Nombre de matchs",loc="right")
+    ax.set_ylabel(
+        "Pourcentage de\nvictoires ajusté\n[%]",
+        va="top",
+        loc="top",
+        rotation="horizontal",
+        labelpad=20,
+    )
+    ax.grid(True)
+    st.pyplot(fig)
+
+    st.subheader("📋 Vos matchs enregistrés")
+    st.dataframe(df)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🗑️ Supprimer le dernier match encodé"):
+            if st.session_state["matches"]:
+                removed_match = st.session_state["matches"].pop()
+                st.success("Dernier match supprimé ✅")
+                st.rerun()
+            else:
+                st.warning("Aucun match à supprimer.")
+
+    with col2:
+        # Exporter les matchs au format JSON
+        if st.session_state["matches"]:
+            json_data = json.dumps(st.session_state["matches"], indent=2)
+            st.download_button(
+                "💾 Télécharger mes matchs", json_data, file_name="mes_matchs_AFT.json"
+            )
+
+    if st.button("🔁 Réinitialiser le calcul"):
+        st.session_state["matches"] = []
+        st.session_state["flag_uploaded_file"] = False
+        st.rerun()
+else:
+    st.info("Ajoutez des matchs pour commencer le calcul.")
+
+
+
+uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
+
+if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
+    try:
+        loaded_data = json.load(uploaded_file)
+        if isinstance(loaded_data, list) and all(
+            isinstance(match, dict) for match in loaded_data
+        ):
+            st.session_state["matches"] = st.session_state["matches"] + loaded_data
+            st.success("✅ Matchs chargés avec succès !")
+            st.session_state["flag_uploaded_file"] = True
+        else:
+            st.error("❌ Fichier invalide.")
+    except Exception as e:
+        st.error(f"❌ Erreur lors du chargement du fichier: {e}")
+
 
 with st.form("match_form"):
     st.subheader("Ajouter un match")
@@ -62,91 +211,6 @@ with st.form("match_form"):
         }
         st.session_state["matches"] = st.session_state["matches"] + [match]
         st.success("✅ Match ajouté avec succès !")
-
-uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
-
-if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
-    try:
-        loaded_data = json.load(uploaded_file)
-        if isinstance(loaded_data, list) and all(
-            isinstance(match, dict) for match in loaded_data
-        ):
-            st.session_state["matches"] = st.session_state["matches"] + loaded_data
-            st.success("✅ Matchs chargés avec succès !")
-            st.session_state["flag_uploaded_file"] = True
-        else:
-            st.error("❌ Fichier invalide.")
-    except Exception as e:
-        st.error(f"❌ Erreur lors du chargement du fichier: {e}")
-
-# ---------- DISPLAY RESULTS ----------
-
-if st.session_state["matches"]:
-    df = pd.DataFrame(st.session_state["matches"])
-    win_ratio, recommendation, match_weights = compute_win_ratio(df)
-    df["coefficient_total"] = match_weights
-    st.subheader("📋 Vos matchs enregistrés")
-    st.dataframe(df)
-
-    col1, col2 = st.columns(2)
-    with col1:
-
-        if st.button("🗑️ Supprimer le dernier match encodé"):
-            if st.session_state["matches"]:
-                removed_match = st.session_state["matches"].pop()
-                st.success("Dernier match supprimé ✅")
-                st.rerun()
-            else:
-                st.warning("Aucun match à supprimer.")
-
-    with col2:
-        # Exporter les matchs au format JSON
-        if st.session_state["matches"]:
-            json_data = json.dumps(st.session_state["matches"], indent=2)
-            st.download_button(
-                "💾 Télécharger mes matchs", json_data, file_name="mes_matchs_AFT.json"
-            )
-
-    st.markdown(f"### 🧶 Pourcentage de victoires ajusté : {win_ratio}%")
-    st.markdown(f"### 📌 Recommandation : {recommendation}")
-
-    # ---------- PLOT RATIO EVOLUTION ----------
-    st.subheader("📈 Évolution du ratio de victoire")
-    ratios = []
-    for i in range(1, len(df) + 1):
-        sub_df = df.iloc[:i]
-        ratio, _, _ = compute_win_ratio(sub_df)
-        ratios.append(ratio)
-
-    fig, ax = plt.subplots()
-    ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
-    ax.set_xticks(range(1, len(ratios) + 1))
-    # ax.set_xticks(
-    #     [
-    #         (
-    #             range(1, len(ratios) + 1)
-    #             if len(ratios) + 1 < 20
-    #             else range(1, len(ratios) + 1, 5)
-    #         )
-    #     ]
-    # )
-    ax.set_xlabel("Nombre de matchs", loc="right")
-    ax.set_ylabel(
-        "Pourcentage de\nvictoires ajusté\n[%]",
-        va="top",
-        loc="top",
-        rotation="horizontal",
-        labelpad=20,
-    )
-    ax.grid(True)
-    st.pyplot(fig)
-
-    if st.button("🔁 Réinitialiser le calcul"):
-        st.session_state["matches"] = []
-        st.session_state["flag_uploaded_file"] = False
-        st.rerun()
-else:
-    st.info("Ajoutez des matchs pour commencer le calcul.")
 
 st.divider()
 st.caption(
