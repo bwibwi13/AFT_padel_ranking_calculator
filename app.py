@@ -33,15 +33,15 @@ with st.form("match_form"):
     phase = st.selectbox("Phase", ["Poule", "Tableau"])
 
     partner_rank = st.selectbox(
-            "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
-        )
-    
+        "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
+    )
+
     col1, col2 = st.columns(2)
     with col1:
         opp1_rank = st.selectbox(
             "Classement adversaire 1", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
-    with col2:        
+    with col2:
         opp2_rank = st.selectbox(
             "Classement adversaire 2", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
@@ -54,7 +54,7 @@ with st.form("match_form"):
             "resultat": result,
             "type_competition": comp_type,
             "phase": phase,
-            "classement_joueur": float(''.join(filter(str.isdigit, category))),
+            "classement_joueur": float("".join(filter(str.isdigit, category))),
             "classement_partenaire": partner_rank,
             "classement_adversaire_1": opp1_rank,
             "classement_adversaire_2": opp2_rank,
@@ -120,8 +120,16 @@ if st.session_state["matches"]:
 
     fig, ax = plt.subplots()
     ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
-    ax.set_xticks(range(1, len(ratios) + 1))
-    ax.set_xlabel("Nombre de matchs",loc="right")
+    ax.set_xticks(
+        [
+            (
+                range(1, len(ratios) + 1)
+                if len(ratios) + 1 < 20
+                else range(1, len(ratios) + 1, 5)
+            )
+        ]
+    )
+    ax.set_xlabel("Nombre de matchs", loc="right")
     ax.set_ylabel(
         "Pourcentage de\nvictoires ajusté\n[%]",
         va="top",
@@ -141,7 +149,7 @@ else:
 
 st.divider()
 st.caption(
-    "Ce calculateur est basé sur le système de classement AFT Padel Wallonie-Bruxelles de [Janvier 2025](https://padel.tppwb.be/wp-content/uploads/2024/12/Methode-calcul-classements-janvier-2025-4.pdf). Ce calculateur est un outil indépendant, non affilié à l'AFT Padel. Les résultats obtenus n'ont aucune valeur officielle et ne remplacent en aucun cas les décisions de l'organisation. Les données que vous entrez sont traitées localement sur les serveurs de Streamlit Cloud et ne sont ni partagées, ni stockées à des fins commerciales."
+    "Ce calculateur est basé sur le système de classement AFT Padel Wallonie-Bruxelles de [Juillet 2025](https://padel.tppwb.be/wp-content/uploads/2025/06/Methode-calcul-classements-juillet-2025-Version-finale.pdf). Ce calculateur est un outil indépendant, non affilié à l'AFT Padel. Les résultats obtenus n'ont aucune valeur officielle et ne remplacent en aucun cas les décisions de l'organisation. Les données que vous entrez sont traitées localement sur les serveurs de Streamlit Cloud et ne sont ni partagées, ni stockées à des fins commerciales."
 )
 
 st.caption(
