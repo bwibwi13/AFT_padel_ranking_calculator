@@ -78,7 +78,7 @@ if len(affiliation_number) == 7:
         )
         if player_info:
             st.info(
-                f"### **Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})"
+                f"### **Joueur·euse :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})"
             )
         else:
             st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
@@ -108,11 +108,14 @@ if st.session_state["matches"]:
 
     fig, ax = plt.subplots()
     ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
-    ax.set_xticks(
-        list(range(1, len(ratios) + 1))
-        if len(ratios) + 1 <= 20
-        else list(range(1, len(ratios) + 1, 5))
-    )
+    xticks = {1, len(ratios)}  # always include first and last
+
+    if len(ratios) + 1 <= 20:
+        xticks.update(range(2, len(ratios)))  # show all intermediate ticks
+    else:
+        xticks.update(range(5, len(ratios), 5))  # every 5th tick
+
+    ax.set_xticks(sorted(xticks))
     ax.set_xlabel("Nombre de matchs", loc="right")
     ax.set_ylabel(
         "Pourcentage de\nvictoires ajusté\n[%]",
