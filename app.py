@@ -120,15 +120,16 @@ if st.session_state["matches"]:
 
     fig, ax = plt.subplots()
     ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
-    ax.set_xticks(
-        [
-            (
-                range(1, len(ratios) + 1)
-                if len(ratios) + 1 < 20
-                else range(1, len(ratios) + 1, 5)
-            )
-        ]
-    )
+    ax.set_xticks(range(1, len(ratios) + 1))
+    # ax.set_xticks(
+    #     [
+    #         (
+    #             range(1, len(ratios) + 1)
+    #             if len(ratios) + 1 < 20
+    #             else range(1, len(ratios) + 1, 5)
+    #         )
+    #     ]
+    # )
     ax.set_xlabel("Nombre de matchs", loc="right")
     ax.set_ylabel(
         "Pourcentage de\nvictoires ajusté\n[%]",
