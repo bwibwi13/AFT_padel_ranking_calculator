@@ -27,7 +27,7 @@ if hasattr(st, "query_params") and st.query_params:
     affiliation_prefill = st.query_params.get("affiliation_number")
 
 with st.form("affiliation_form", clear_on_submit=False):
-    col_aff, col_btn = st.columns([3,2])
+    col_aff, col_btn = st.columns([3, 2])
     with col_aff:
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
@@ -36,17 +36,19 @@ with st.form("affiliation_form", clear_on_submit=False):
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
 
-        load_matches = st.form_submit_button("⬇️ Charger mes matchs depuis le site TPPWB")
+        load_matches = st.form_submit_button(
+            "⬇️ Charger mes matchs depuis le site TPPWB"
+        )
 
     with col_btn:
         if (load_matches and affiliation_number) or affiliation_prefill:
             # Reset session in case previous data exists
             st.session_state["matches"] = []
             st.session_state["flag_uploaded_file"] = False
-            
+
             try:
                 matches, category_change = tppwb_matches(affiliation_number)
-                #st.write(matches)
+                # st.write(matches)
 
                 if isinstance(matches, list):
                     if len(matches) > 0:
@@ -59,7 +61,9 @@ with st.form("affiliation_form", clear_on_submit=False):
                                 "On ne regarde que les résultats du semestre en cours."
                             )
                     else:
-                        st.warning("⚠️ Données récupérées mais pas de résultats encodés..")
+                        st.warning(
+                            "⚠️ Données récupérées mais pas de résultats encodés.."
+                        )
                 else:
                     st.error("❌ Données reçues invalides.")
             except Exception as e:
@@ -69,9 +73,13 @@ with st.form("affiliation_form", clear_on_submit=False):
 if len(affiliation_number) == 7:
     try:
         player_infos = tppwb_player_info(affiliation_number)
-        player_info = player_infos[0] if isinstance(player_infos, list) and player_infos else None
+        player_info = (
+            player_infos[0] if isinstance(player_infos, list) and player_infos else None
+        )
         if player_info:
-            st.info(f"### **Joueur :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})")
+            st.info(
+                f"### **Joueur·euse :** {player_info.get("Prenom")} {player_info.get("Nom")} ({player_info.get("ClasmtDouble")})"
+            )
         else:
             st.warning("Aucun joueur trouvé pour ce numéro d'affiliation.")
     except Exception as e:
@@ -81,7 +89,7 @@ if len(affiliation_number) == 7:
 
 if st.session_state["matches"]:
     # DEBUG
-    #st.write(st.session_state["matches"])
+    # st.write(st.session_state["matches"])
 
     df = pd.DataFrame(st.session_state["matches"])
     win_ratio, recommendation, match_weights = compute_win_ratio(df)
@@ -100,8 +108,15 @@ if st.session_state["matches"]:
 
     fig, ax = plt.subplots()
     ax.plot(range(1, len(ratios) + 1), ratios, marker="o", color="orangered", lw=2)
-    ax.set_xticks(range(1, len(ratios) + 1))
-    ax.set_xlabel("Nombre de matchs",loc="right")
+    xticks = {1, len(ratios)}  # always include first and last
+
+    if len(ratios) + 1 <= 20:
+        xticks.update(range(2, len(ratios)))  # show all intermediate ticks
+    else:
+        xticks.update(range(5, len(ratios), 5))  # every 5th tick
+
+    ax.set_xticks(sorted(xticks))
+    ax.set_xlabel("Nombre de matchs", loc="right")
     ax.set_ylabel(
         "Pourcentage de\nvictoires ajusté\n[%]",
         va="top",
@@ -141,7 +156,6 @@ else:
     st.info("Ajoutez des matchs pour commencer le calcul.")
 
 
-
 uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
 
 if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
@@ -174,15 +188,15 @@ with st.form("match_form"):
     phase = st.selectbox("Phase", ["Poule", "Tableau"])
 
     partner_rank = st.selectbox(
-            "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
-        )
-    
+        "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
+    )
+
     col1, col2 = st.columns(2)
     with col1:
         opp1_rank = st.selectbox(
             "Classement adversaire 1", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
-    with col2:        
+    with col2:
         opp2_rank = st.selectbox(
             "Classement adversaire 2", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
@@ -195,7 +209,7 @@ with st.form("match_form"):
             "resultat": result,
             "type_competition": comp_type,
             "phase": phase,
-            "classement_joueur": float(''.join(filter(str.isdigit, category))),
+            "classement_joueur": float("".join(filter(str.isdigit, category))),
             "classement_partenaire": partner_rank,
             "classement_adversaire_1": opp1_rank,
             "classement_adversaire_2": opp2_rank,
@@ -206,7 +220,7 @@ with st.form("match_form"):
 
 st.divider()
 st.caption(
-    "Ce calculateur est basé sur le système de classement AFT Padel Wallonie-Bruxelles de [Janvier 2025](https://padel.tppwb.be/wp-content/uploads/2024/12/Methode-calcul-classements-janvier-2025-4.pdf). Ce calculateur est un outil indépendant, non affilié à l'AFT Padel. Les résultats obtenus n'ont aucune valeur officielle et ne remplacent en aucun cas les décisions de l'organisation. Les données que vous entrez sont traitées localement sur les serveurs de Streamlit Cloud et ne sont ni partagées, ni stockées à des fins commerciales."
+    "Ce calculateur est basé sur le système de classement AFT Padel Wallonie-Bruxelles de [Juillet 2025](https://padel.tppwb.be/wp-content/uploads/2025/06/Methode-calcul-classements-juillet-2025-Version-finale.pdf). Ce calculateur est un outil indépendant, non affilié à l'AFT Padel. Les résultats obtenus n'ont aucune valeur officielle et ne remplacent en aucun cas les décisions de l'organisation. Les données que vous entrez sont traitées localement sur les serveurs de Streamlit Cloud et ne sont ni partagées, ni stockées à des fins commerciales."
 )
 
 st.caption(
