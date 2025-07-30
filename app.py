@@ -47,24 +47,24 @@ with st.form("affiliation_form", clear_on_submit=False):
             st.session_state["flag_uploaded_file"] = False
 
             try:
-                matches, category_change = tppwb_matches(affiliation_number)
+                matches, category_change, date_from = tppwb_matches(affiliation_number)
                 # st.write(matches)
 
                 if isinstance(matches, list):
                     if len(matches) > 0:
-                        st.success("✅ Matchs chargés !")
+                        st.success(f"✅ Matchs chargés (depuis {date_from}) !")
                         st.session_state["matches"] = matches
                         st.session_state["flag_uploaded_file"] = True
                     else:
                         st.warning(
-                            "⚠️ Données récupérées mais pas de résultats encodés... "
+                            f"⚠️ Données récupérées mais pas de résultats encodés (depuis {date_from})...\n\n"
                             "Peut-être n'avez vous pas encore joué de matchs cette période-ci ?"
                         )
                     
                     if category_change:
                         st.info(
-                            "⚠️ On détecte un changement de catégorie durant la dernière période. "
-                            "On ne regarde que les résultats du semestre en cours."
+                            f"⚠️ On détecte un changement de catégorie durant la dernière période. "
+                            f"On ne regarde que les résultats du semestre en cours."
                         )
                 else:
                     st.error("❌ Données reçues invalides.")
