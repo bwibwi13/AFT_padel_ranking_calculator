@@ -62,7 +62,8 @@ with st.form("affiliation_form", clear_on_submit=False):
                             )
                     else:
                         st.warning(
-                            "⚠️ Données récupérées mais pas de résultats encodés.."
+                            "⚠️ Données récupérées mais pas de résultats encodés... "
+                            "Peut-être n'avez vous pas encore joué de matchs cette période-ci ?"
                         )
                 else:
                     st.error("❌ Données reçues invalides.")
