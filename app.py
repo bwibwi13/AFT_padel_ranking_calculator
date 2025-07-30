@@ -55,15 +55,16 @@ with st.form("affiliation_form", clear_on_submit=False):
                         st.success("✅ Matchs chargés !")
                         st.session_state["matches"] = matches
                         st.session_state["flag_uploaded_file"] = True
-                        if category_change:
-                            st.info(
-                                "⚠️ On détecte un changement de catégorie durant les 12 derniers mois. "
-                                "On ne regarde que les résultats du semestre en cours."
-                            )
                     else:
                         st.warning(
                             "⚠️ Données récupérées mais pas de résultats encodés... "
                             "Peut-être n'avez vous pas encore joué de matchs cette période-ci ?"
+                        )
+                    
+                    if category_change:
+                        st.info(
+                            "⚠️ On détecte un changement de catégorie durant la dernière période. "
+                            "On ne regarde que les résultats du semestre en cours."
                         )
                 else:
                     st.error("❌ Données reçues invalides.")
