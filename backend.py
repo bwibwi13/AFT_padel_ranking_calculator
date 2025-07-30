@@ -117,6 +117,6 @@ def generate_recommendation(
     ):
         return f"\U0001f7e9 Vous pouvez monter de 2 niveaux, le seuil requis de {limits['up2']}% a été atteint"
     elif ratio > limits["up1"]:
-        return f"\U0001f7e8 Vous pouvez monter de 1 niveau, le seuil requis de {limits['up1']}% a été atteint"
+        return f"\U0001f7e9 Vous pouvez monter de 1 niveau, le seuil requis de {limits['up1']}% a été atteint"
     else:
         return f"\U00002b1c Maintien conseillé, pour info: le seuil de montée est égal à {limits['up1']}%"
