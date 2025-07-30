@@ -154,70 +154,81 @@ if st.session_state["matches"]:
         st.session_state["flag_uploaded_file"] = False
         st.rerun()
 else:
-    st.info("Ajoutez des matchs pour commencer le calcul.")
-
-
-uploaded_file = st.file_uploader("📂 Charger un fichier de matchs (.json)", type="json")
-
-if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
-    try:
-        loaded_data = json.load(uploaded_file)
-        if isinstance(loaded_data, list) and all(
-            isinstance(match, dict) for match in loaded_data
-        ):
-            st.session_state["matches"] = st.session_state["matches"] + loaded_data
-            st.success("✅ Matchs chargés avec succès !")
-            st.session_state["flag_uploaded_file"] = True
-        else:
-            st.error("❌ Fichier invalide.")
-    except Exception as e:
-        st.error(f"❌ Erreur lors du chargement du fichier: {e}")
-
-
-with st.form("match_form"):
-    st.subheader("Ajouter un match")
-
-    genre = st.selectbox("Genre", ["Messieurs", "Dames"])
-    category = st.selectbox(
-        "Votre classement actuel",
-        ["P50", "P100", "P200", "P300", "P400", "P500", "P700", "P1000"],
-    )
-    result = st.selectbox("Résultat", ["Victoire", "Défaite"])
-    comp_type = st.selectbox(
-        "Type de compétition", ["Tour", "Interclubs", "Mixte", "Masters"]
-    )
-    phase = st.selectbox("Phase", ["Poule", "Tableau"])
-
-    partner_rank = st.selectbox(
-        "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
+    st.info(
+        "Entrez votre numéro d'affiliation ou ajoutez des matchs manuellement pour commencer le calcul."
     )
 
-    col1, col2 = st.columns(2)
-    with col1:
-        opp1_rank = st.selectbox(
-            "Classement adversaire 1", [50] + list(range(100, 600, 100)) + [700, 1000]
+manual_input = st.checkbox(
+    "Ajouter des matchs manuellement ou depuis un fichier JSON", value=False
+)
+
+
+if manual_input:
+
+    uploaded_file = st.file_uploader(
+        "📂 Charger un fichier de matchs (.json)", type="json"
+    )
+
+    if st.session_state["flag_uploaded_file"] is False and uploaded_file is not None:
+        try:
+            loaded_data = json.load(uploaded_file)
+            if isinstance(loaded_data, list) and all(
+                isinstance(match, dict) for match in loaded_data
+            ):
+                st.session_state["matches"] = st.session_state["matches"] + loaded_data
+                st.success("✅ Matchs chargés avec succès !")
+                st.session_state["flag_uploaded_file"] = True
+            else:
+                st.error("❌ Fichier invalide.")
+        except Exception as e:
+            st.error(f"❌ Erreur lors du chargement du fichier: {e}")
+
+    with st.form("match_form"):
+        st.subheader("Ajouter un match")
+
+        genre = st.selectbox("Genre", ["Messieurs", "Dames"])
+        category = st.selectbox(
+            "Votre classement actuel",
+            ["P50", "P100", "P200", "P300", "P400", "P500", "P700", "P1000"],
         )
-    with col2:
-        opp2_rank = st.selectbox(
-            "Classement adversaire 2", [50] + list(range(100, 600, 100)) + [700, 1000]
+        result = st.selectbox("Résultat", ["Victoire", "Défaite"])
+        comp_type = st.selectbox(
+            "Type de compétition", ["Tour", "Interclubs", "Mixte", "Masters"]
+        )
+        phase = st.selectbox("Phase", ["Poule", "Tableau"])
+
+        partner_rank = st.selectbox(
+            "Classement partenaire", [50] + list(range(100, 600, 100)) + [700, 1000]
         )
 
-    submitted = st.form_submit_button("Ajouter le match")
+        col1, col2 = st.columns(2)
+        with col1:
+            opp1_rank = st.selectbox(
+                "Classement adversaire 1",
+                [50] + list(range(100, 600, 100)) + [700, 1000],
+            )
+        with col2:
+            opp2_rank = st.selectbox(
+                "Classement adversaire 2",
+                [50] + list(range(100, 600, 100)) + [700, 1000],
+            )
 
-    if submitted:
-        match = {
-            "genre": genre,
-            "resultat": result,
-            "type_competition": comp_type,
-            "phase": phase,
-            "classement_joueur": float("".join(filter(str.isdigit, category))),
-            "classement_partenaire": partner_rank,
-            "classement_adversaire_1": opp1_rank,
-            "classement_adversaire_2": opp2_rank,
-            "categorie": category,
-        }
-        st.session_state["matches"] = st.session_state["matches"] + [match]
-        st.success("✅ Match ajouté avec succès !")
+        submitted = st.form_submit_button("Ajouter le match")
+
+        if submitted:
+            match = {
+                "genre": genre,
+                "resultat": result,
+                "type_competition": comp_type,
+                "phase": phase,
+                "classement_joueur": float("".join(filter(str.isdigit, category))),
+                "classement_partenaire": partner_rank,
+                "classement_adversaire_1": opp1_rank,
+                "classement_adversaire_2": opp2_rank,
+                "categorie": category,
+            }
+            st.session_state["matches"] = st.session_state["matches"] + [match]
+            st.success("✅ Match ajouté avec succès !")
 
 st.divider()
 st.caption(
