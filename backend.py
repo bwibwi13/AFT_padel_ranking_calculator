@@ -102,14 +102,19 @@ def generate_recommendation(
 
     # Seulement 12 matchs nécessaires sauf si montée de 2 classements alors 24 sont nécessaires
     required_matches = 12
+    required_matches_up2 = 24
 
     if category not in thresholds or match_count < required_matches:
-        return f"❕ Pas de recommandation (catégorie inconnue ou <{required_matches} matchs)."
+        return f"❕ Pas de recommandation (catégorie inconnue ou moins de {required_matches} matchs effectués)."
 
     limits = thresholds[category]
     if ratio < limits["drop"]:
         return "\U0001f7e5 Descente recommandée"
-    elif limits["up2"] <= 100 and ratio > limits["up2"]:
+    elif (
+        limits["up2"] <= 100
+        and ratio > limits["up2"]
+        and match_count >= required_matches_up2
+    ):
         return "\U0001f7e9 Montée de 2 niveaux possible"
     elif ratio > limits["up1"]:
         return "\U0001f7e8 Montée de 1 niveau possible"
