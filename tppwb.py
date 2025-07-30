@@ -9,6 +9,7 @@ def has_multiple_classement_joueur(matches):
         for match in matches
         if "classement_joueur" in match
     )
+    print(f"Unique classement_joueur values: {unique_values}")
     return len(unique_values) > 1
 
 
@@ -26,6 +27,10 @@ def tppwb_matches(affiliation_number):
             match = {"genre": "Erreur dict"}
             matches.append(match)
             continue  # skip non-dict items
+        if ("0/0" in item.get("Score", "") and item.get("VictoryOrDefeat") == "V") or (
+            "Bless." in item.get("Score", "")
+        ):
+            continue  # Skip WO victories and matches with injury (Bless.)
         match = {
             # Guess the gender from the category
             "genre": "Dames" if item.get("Category").startswith("WD") else "Messieurs",
@@ -80,7 +85,7 @@ def tppwb_matches(affiliation_number):
         if today.month <= 6:
             semester_start = datetime.date(today.year, 1, 1)
         else:
-            semester_start = datetime.date(today.year, 7, 1)
+            semester_start = datetime.date(today.year, 7, 7)
 
         # Filter matches to keep only those from the current semester
         matches = [

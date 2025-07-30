@@ -57,7 +57,7 @@ with st.form("affiliation_form", clear_on_submit=False):
                         st.session_state["flag_uploaded_file"] = True
                         if category_change:
                             st.info(
-                                "⚠️ On détecte un changement de catégorie. "
+                                "⚠️ On détecte un changement de catégorie durant les 12 derniers mois. "
                                 "On ne regarde que les résultats du semestre en cours."
                             )
                     else:
