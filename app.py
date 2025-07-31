@@ -22,9 +22,9 @@ if "flag_uploaded_file" not in st.session_state:
 # ---------- Retrieve data from the TPPWB website ----------
 
 # Parse affiliation number from the URL GET parameters if provided
-affiliation_prefill = ""
-if hasattr(st, "query_params") and st.query_params:
-    affiliation_prefill = st.query_params.get("affiliation_number")
+# affiliation_prefill = ""
+# if hasattr(st, "query_params") and st.query_params:
+#     affiliation_prefill = st.query_params.get("affiliation_number")
 
 with st.form("affiliation_form", clear_on_submit=False):
     col_aff, col_btn = st.columns([3, 2])
@@ -32,7 +32,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
             max_chars=7,
-            value=affiliation_prefill,
+            # value=affiliation_prefill,
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
 
@@ -41,7 +41,10 @@ with st.form("affiliation_form", clear_on_submit=False):
         )
 
     with col_btn:
-        if (load_matches and affiliation_number) or affiliation_prefill:
+        if load_matches and affiliation_number:  # or affiliation_prefill:
+            if not isinstance(affiliation_number, str) or len(affiliation_number) == 0:
+                st.error("❌ Veuillez entrer un numéro d'affiliation valide.")
+
             # Reset session in case previous data exists
             st.session_state["matches"] = []
             st.session_state["flag_uploaded_file"] = False

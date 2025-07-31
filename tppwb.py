@@ -9,7 +9,6 @@ def has_multiple_classement_joueur(matches):
         for match in matches
         if "classement_joueur" in match
     )
-    print(f"Unique classement_joueur values: {unique_values}")
     return len(unique_values) > 1
 
 
