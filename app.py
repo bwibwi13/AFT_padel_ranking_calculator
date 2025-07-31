@@ -48,6 +48,7 @@ with st.form("affiliation_form", clear_on_submit=False):
                 and len(affiliation_number) == 7
             ):
                 st.error("❌ Veuillez entrer un numéro d'affiliation valide.")
+                st.stop()
 
             # Reset session in case previous data exists
             st.session_state["matches"] = []
