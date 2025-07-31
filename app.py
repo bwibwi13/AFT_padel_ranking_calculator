@@ -42,7 +42,11 @@ with st.form("affiliation_form", clear_on_submit=False):
 
     with col_btn:
         if load_matches and affiliation_number:  # or affiliation_prefill:
-            if not isinstance(affiliation_number, str) or len(affiliation_number) == 0:
+            if not (
+                isinstance(affiliation_number, str)
+                and affiliation_number.isdigit()
+                and len(affiliation_number) == 7
+            ):
                 st.error("❌ Veuillez entrer un numéro d'affiliation valide.")
 
             # Reset session in case previous data exists
