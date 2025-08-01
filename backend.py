@@ -15,7 +15,7 @@ RANKING_THRESHOLDS_MEN = {
     "P400": {"drop": 30, "up1": 65, "up2": 100},
     "P500": {"drop": 30, "up1": 70, "up2": 100},
     "P700": {"drop": 35, "up1": 75, "up2": 100},
-    "P1000": {"drop": 35, "up1": 35, "up2": 100},
+    "P1000": {"drop": 35, "up1": 100, "up2": 100},
 }
 
 RANKING_THRESHOLDS_WOMEN = {
