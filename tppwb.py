@@ -9,7 +9,6 @@ def has_multiple_classement_joueur(matches):
         for match in matches
         if "classement_joueur" in match
     )
-    print(f"Unique classement_joueur values: {unique_values}")
     return len(unique_values) > 1
 
 
@@ -20,13 +19,13 @@ def tppwb_matches(affiliation_number):
     today = datetime.date.today()
     if today.month <= 6:
         # January to June: use July 1st of the previous year
-        date_from = datetime.date(today.year - 1, 7, 1)
+        date_from = datetime.date(today.year - 1, 7, 7)
     else:
         # July to December: use January 1st of the current year
         date_from = datetime.date(today.year, 1, 1)
 
     tppwb_data = tppwb_raw_data(affiliation_number, date_from)
-    # return tppwb_data, False, date_from
+
 
     # Sort by ascending order of "Date"
     tppwb_data = sorted(tppwb_data, key=lambda x: x.get("Date", ""))
@@ -95,7 +94,7 @@ def tppwb_matches(affiliation_number):
         if today.month <= 6:
             date_from = datetime.date(today.year, 1, 1)
         else:
-            date_from = datetime.date(today.year, 7, 1)
+            date_from = datetime.date(today.year, 7, 7)
 
         # Filter matches to keep only those from the current semester
         matches = [
@@ -111,8 +110,10 @@ def tppwb_matches(affiliation_number):
     return matches, category_change, date_from
 
 
+
 # Get player results from TPPWB API based on affiliation number
 # https://padel-webapi.tppwb.be/Help/Api/GET-api-Players-GetResultsByPlayer_affiliationNumber_singleOrDouble_dateFrom_dateTo_top_splitVictoriesAndDefeats_splitSinglesAndDoubles
+
 def tppwb_raw_data(affiliation_number, date_from):
     url = (
         "https://padel-webapi.tppwb.be/api/Players/GetResultsByPlayer"
