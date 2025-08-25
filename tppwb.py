@@ -94,7 +94,7 @@ def tppwb_matches(affiliation_number):
         if today.month <= 6:
             date_from = datetime.date(today.year, 1, 1)
         else:
-            date_from = datetime.date(today.year, 7, 7)
+            date_from = datetime.date(today.year, 7, 1)
 
         # Filter matches to keep only those from the current semester
         matches = [
