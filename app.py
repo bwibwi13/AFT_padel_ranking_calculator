@@ -42,7 +42,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         )
 
     with col_btn:
-        if load_matches and affiliation_number:  # or affiliation_prefill:
+        if (load_matches and affiliation_number) or affiliation_prefill:
             if not (
                 isinstance(affiliation_number, str)
                 and affiliation_number.isdigit()
