@@ -29,11 +29,22 @@ RANKING_THRESHOLDS_WOMEN = {
 
 
 def get_ranking_correction(player, partner, opp1, opp2, result):
-    my_sum = player + partner
-    opp_sum = opp1 + opp2
 
-    delta_sum = (my_sum - opp_sum) // 100
-    delta_individual = (player - partner) // 100
+    # define ranking ladder
+    RANKS = [50, 100, 200, 300, 400, 500, 700, 1000]
+    index = {r: i for i, r in enumerate(RANKS)}
+
+    # convert rankings to ladder indices
+    player_idx = index[player]
+    partner_idx = index[partner]
+    opp1_idx = index[opp1]
+    opp2_idx = index[opp2]
+
+    my_sum = player_idx + partner_idx
+    opp_sum = opp1_idx + opp2_idx
+
+    delta_sum = my_sum - opp_sum
+    delta_individual = player_idx - partner_idx
 
     delta_sum = max(min(int(delta_sum), 3), -3)
     delta_individual = max(min(int(delta_individual), 3), -3)
@@ -112,14 +123,19 @@ def generate_recommendation(
         return f"\U0001f7e5 Descente recommandée, le ratio est inférieur au seuil de {limits['drop']}%"
 
     elif (
-        limits["up2"] <= 100
+        limits["up2"] < 100
         and ratio > limits["up2"]
         and match_count >= required_matches_up2
     ):
         return f"\U0001f7e9 Vous pouvez monter de 2 niveaux, le seuil requis de {limits['up2']}% a été atteint"
+    elif (
+        limits["up2"] < 100
+        and ratio > limits["up2"]
+        and match_count < required_matches_up2
+    ):
+        return f"\U0001f7e9 Le seuil requis de {limits['up2']}% a été atteint mais le nombre de matchs est inférieur à {required_matches_up2}, ce qui est insuffisant pour monter de deux niveaux. Montée de 1 niveau possible."
 
     elif ratio > limits["up1"]:
         return f"\U0001f7e9 Vous pouvez monter de 1 niveau, le seuil requis de {limits['up1']}% a été atteint"
     else:
         return f"\U00002b1c Maintien conseillé, pour info: le seuil de montée est égal à {limits['up1']}%"
-
