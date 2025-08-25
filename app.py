@@ -22,9 +22,9 @@ if "flag_uploaded_file" not in st.session_state:
 # ---------- Retrieve data from the TPPWB website ----------
 
 # Parse affiliation number from the URL GET parameters if provided
-# affiliation_prefill = ""
-# if hasattr(st, "query_params") and st.query_params:
-#     affiliation_prefill = st.query_params.get("affiliation_number")
+affiliation_prefill = ""
+if hasattr(st, "query_params") and st.query_params:
+    affiliation_prefill = st.query_params.get("affiliation_number")
 
 
 with st.form("affiliation_form", clear_on_submit=False):
@@ -33,7 +33,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         affiliation_number = st.text_input(
             "Numéro d'affiliation",
             max_chars=7,
-            # value=affiliation_prefill,
+            value=affiliation_prefill,
             help="Entrez votre numéro d'affiliation AFT (7 chiffres)",
         )
 
@@ -42,7 +42,7 @@ with st.form("affiliation_form", clear_on_submit=False):
         )
 
     with col_btn:
-        if load_matches and affiliation_number:  # or affiliation_prefill:
+        if (load_matches and affiliation_number) or affiliation_prefill:
             if not (
                 isinstance(affiliation_number, str)
                 and affiliation_number.isdigit()
