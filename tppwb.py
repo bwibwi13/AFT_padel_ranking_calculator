@@ -18,10 +18,10 @@ def tppwb_matches(affiliation_number):
     # (Category change will be computed at the end of the semester, based on the last 12 months at most)
     today = datetime.date.today()
     if today.month <= 6:
-        # January to June: use July 1st of the previous year
-        date_from = datetime.date(today.year - 1, 7, 1)
+        # January to June: start on July of the previous year
+        date_from = datetime.date(today.year - 1, 7, 7) # 25H2 started on July 7th for TPPWB results
     else:
-        # July to December: use January 1st of the current year
+        # July to December: start on January of the current year
         date_from = datetime.date(today.year, 1, 1)
 
     tppwb_data = tppwb_raw_data(affiliation_number, date_from)
@@ -94,7 +94,7 @@ def tppwb_matches(affiliation_number):
         if today.month <= 6:
             date_from = datetime.date(today.year, 1, 1)
         else:
-            date_from = datetime.date(today.year, 7, 1)
+            date_from = datetime.date(today.year, 7, 7) # 25H2 started on July 7th for TPPWB results
 
         # Filter matches to keep only those from the current semester
         matches = [
